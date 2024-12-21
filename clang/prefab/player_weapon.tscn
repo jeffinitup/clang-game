@@ -1,0 +1,116 @@
+[gd_scene load_steps=12 format=3 uid="uid://bfbbrwtjg0nnp"]
+
+[ext_resource type="Script" path="res://scripts/player_weapon.gd" id="1_wmmsa"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_kvcqx"]
+animation = &"RESET"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_0j072"]
+animation = &"swing"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_r2uni"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_j6p6w"]
+xfade_time = 0.2
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_0nkyw"]
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_ew63d"]
+states/RESET/node = SubResource("AnimationNodeAnimation_kvcqx")
+states/RESET/position = Vector2(351, 100)
+states/swing/node = SubResource("AnimationNodeAnimation_0j072")
+states/swing/position = Vector2(528, 100)
+transitions = ["Start", "RESET", SubResource("AnimationNodeStateMachineTransition_r2uni"), "swing", "RESET", SubResource("AnimationNodeStateMachineTransition_j6p6w"), "RESET", "swing", SubResource("AnimationNodeStateMachineTransition_0nkyw")]
+
+[sub_resource type="Animation" id="Animation_cc6r7"]
+resource_name = "swing"
+length = 0.6
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../pivot:rotation")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [-0.610865, 0.610865]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../pivot/vis:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Vector2(1.5, 0.7), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_qvtfo"]
+resource_name = "idle"
+length = 0.001
+
+[sub_resource type="Animation" id="Animation_0ef1u"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../pivot:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../pivot/vis:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_q15ae"]
+_data = {
+"RESET": SubResource("Animation_0ef1u"),
+"idle": SubResource("Animation_qvtfo"),
+"swing": SubResource("Animation_cc6r7")
+}
+
+[node name="player_weapon" type="Node2D"]
+script = ExtResource("1_wmmsa")
+
+[node name="pivot" type="Node2D" parent="."]
+
+[node name="vis" type="ColorRect" parent="pivot"]
+offset_left = 19.0
+offset_top = -2.0
+offset_right = 54.0
+offset_bottom = 2.0
+pivot_offset = Vector2(0, 2)
+color = Color(1, 0, 0, 1)
+
+[node name="animTree" type="AnimationTree" parent="."]
+root_node = NodePath(".")
+tree_root = SubResource("AnimationNodeStateMachine_ew63d")
+anim_player = NodePath("anim")
+
+[node name="anim" type="AnimationPlayer" parent="animTree"]
+libraries = {
+"": SubResource("AnimationLibrary_q15ae")
+}

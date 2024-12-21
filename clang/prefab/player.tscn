@@ -1,0 +1,124 @@
+[gd_scene load_steps=9 format=3 uid="uid://wgifaqp6m28b"]
+
+[ext_resource type="Script" path="res://scripts/component/controller.gd" id="1_lng0o"]
+[ext_resource type="Script" path="res://scripts/player.gd" id="1_q3oqn"]
+[ext_resource type="PackedScene" uid="uid://bfbbrwtjg0nnp" path="res://prefab/player_weapon.tscn" id="2_nv7x4"]
+[ext_resource type="Script" path="res://scripts/component/state_machine.gd" id="2_rtogl"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_w0fvi"]
+size = Vector2(26, 36)
+
+[sub_resource type="GDScript" id="GDScript_2u1e1"]
+resource_name = "player_idle"
+script/source = "### player_idle.gd
+extends State
+
+@onready var player = owner as Player
+
+func _enter(_msg := {}) -> void:
+	pass
+
+func _state_physics_process(delta : float) -> void:
+	player.update_physics(delta)
+	
+	if !is_zero_approx(%controller.movement_vector.x):
+		state_machine.transition_state(\"move\")
+	
+	if %controller.jump_pressed && player.is_on_floor():
+		state_machine.transition_state(\"airborne\", {\"jumping\" : true})
+"
+
+[sub_resource type="GDScript" id="GDScript_jqpfa"]
+resource_name = "player_move"
+script/source = "### player_move.gd
+extends State
+
+@onready var player = owner as Player
+
+func _enter(_msg := {}) -> void:
+	pass
+
+func _state_physics_process(delta : float) -> void:
+	player.velocity.x = lerp(
+		player.velocity.x,
+		player.move_speed * %controller.movement_vector.x,
+		player.acceleration if !is_zero_approx(%controller.movement_vector.x) else player.deacceleration
+	)
+	
+	player.update_physics(delta)
+	
+	if is_zero_approx(player.move_speed):
+		state_machine.transition_state(\"idle\")
+	
+	if %controller.jump_pressed && player.is_on_floor():
+		state_machine.transition_state(\"airborne\", {\"jumping\" : true})
+"
+
+[sub_resource type="GDScript" id="GDScript_48wc7"]
+resource_name = "player_airborne"
+script/source = "## player_airborne.gd
+extends State
+
+@onready var player = owner as Player
+
+func _enter(msg := {}) -> void:
+	if msg.get(\"jumping\", false):
+		player.velocity.y = player.jump_velocity
+		player.jumping = true
+
+func _state_physics_process(delta : float) -> void:
+	player.velocity.x = lerp(
+		player.velocity.x,
+		player.move_speed * %controller.movement_vector.x,
+		player.acceleration if !is_zero_approx(%controller.movement_vector.x) else player.deacceleration
+	)
+	
+	player.update_physics(delta)
+	
+	if player.velocity.y <= 0 && player.jumping:
+		player.jumping = false
+	
+	if player.is_on_floor():
+		player.velocity.y = 0
+		if is_equal_approx(player.velocity.x, 0.0):
+			state_machine.transition_state(\"idle\")
+		else:
+			state_machine.transition_state(\"move\")
+		return
+"
+
+[node name="player" type="CharacterBody2D"]
+script = ExtResource("1_q3oqn")
+move_speed = 96.0
+jump_height = 148.0
+jump_time_to_peak = 1.25
+jump_time_to_descent = 0.85
+
+[node name="visual" type="ColorRect" parent="."]
+offset_left = -16.0
+offset_top = -40.0
+offset_right = 16.0
+
+[node name="col" type="CollisionShape2D" parent="."]
+position = Vector2(0, -18)
+shape = SubResource("RectangleShape2D_w0fvi")
+
+[node name="player_weapon" parent="." instance=ExtResource("2_nv7x4")]
+position = Vector2(0, -18)
+
+[node name="controller" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("1_lng0o")
+
+[node name="state_machine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
+script = ExtResource("2_rtogl")
+initial_state = NodePath("idle")
+
+[node name="idle" type="Node" parent="state_machine"]
+script = SubResource("GDScript_2u1e1")
+
+[node name="move" type="Node" parent="state_machine"]
+script = SubResource("GDScript_jqpfa")
+
+[node name="airborne" type="Node" parent="state_machine"]
+script = SubResource("GDScript_48wc7")

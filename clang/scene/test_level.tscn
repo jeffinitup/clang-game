@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://b4e7rxcqshnqj"]
+
+[ext_resource type="PackedScene" uid="uid://wgifaqp6m28b" path="res://prefab/player.tscn" id="1_323tv"]
+
+[node name="test_level" type="Node2D"]
+
+[node name="player" parent="." instance=ExtResource("1_323tv")]
+position = Vector2(159, 311)
+
+[node name="level" type="StaticBody2D" parent="."]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="level"]
+polygon = PackedVector2Array(58, 333, 394, 333, 395, 264, 580, 264, 580, 437, 52, 435)
