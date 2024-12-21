@@ -113,6 +113,7 @@ script = ExtResource("1_lng0o")
 [node name="state_machine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
 script = ExtResource("2_rtogl")
 initial_state = NodePath("idle")
+debug_print = true
 
 [node name="idle" type="Node" parent="state_machine"]
 script = SubResource("GDScript_2u1e1")

@@ -1,6 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://bfbbrwtjg0nnp"]
+[gd_scene load_steps=16 format=3 uid="uid://bfbbrwtjg0nnp"]
 
 [ext_resource type="Script" path="res://scripts/player_weapon.gd" id="1_wmmsa"]
+[ext_resource type="Script" path="res://scripts/component/state_machine.gd" id="2_xuvng"]
+[ext_resource type="Script" path="res://scripts/component/anim_helper.gd" id="3_uj8f8"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_kvcqx"]
 animation = &"RESET"
@@ -24,39 +26,6 @@ states/RESET/position = Vector2(351, 100)
 states/swing/node = SubResource("AnimationNodeAnimation_0j072")
 states/swing/position = Vector2(528, 100)
 transitions = ["Start", "RESET", SubResource("AnimationNodeStateMachineTransition_r2uni"), "swing", "RESET", SubResource("AnimationNodeStateMachineTransition_j6p6w"), "RESET", "swing", SubResource("AnimationNodeStateMachineTransition_0nkyw")]
-
-[sub_resource type="Animation" id="Animation_cc6r7"]
-resource_name = "swing"
-length = 0.6
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("../pivot:rotation")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(0.5, 1),
-"update": 0,
-"values": [-0.610865, 0.610865]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("../pivot/vis:scale")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(2, 1),
-"update": 0,
-"values": [Vector2(1.5, 0.7), Vector2(1, 1)]
-}
-
-[sub_resource type="Animation" id="Animation_qvtfo"]
-resource_name = "idle"
-length = 0.001
 
 [sub_resource type="Animation" id="Animation_0ef1u"]
 length = 0.001
@@ -85,12 +54,82 @@ tracks/1/keys = {
 "values": [Vector2(1, 1)]
 }
 
+[sub_resource type="Animation" id="Animation_qvtfo"]
+resource_name = "idle"
+length = 0.001
+
+[sub_resource type="Animation" id="Animation_cc6r7"]
+resource_name = "swing"
+length = 0.5
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../pivot:rotation")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [-1.0472, 1.0472]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../pivot/vis:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector2(1.5, 0.7), Vector2(1, 1)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_q15ae"]
 _data = {
 "RESET": SubResource("Animation_0ef1u"),
 "idle": SubResource("Animation_qvtfo"),
 "swing": SubResource("Animation_cc6r7")
 }
+
+[sub_resource type="GDScript" id="GDScript_pqglh"]
+resource_name = "weapon_idle"
+script/source = "### weapon_idle.gd
+extends State
+
+@onready var weapon := owner as PlayerWeapon
+
+func _enter(_msg := {}) -> void:
+	pass
+
+func _state_process(_delta : float) -> void:
+	weapon.update_rotation()
+
+func _state_unhandled_input(_event : InputEvent) -> void:
+	if weapon.player.player_controller.swing_pressed:
+		state_machine.transition_state(\"swing\")
+"
+
+[sub_resource type="GDScript" id="GDScript_iui4w"]
+resource_name = "weapon_swing"
+script/source = "### weapon_swing.gd
+extends State
+
+@onready var weapon := owner as PlayerWeapon
+
+func _enter(_msg := {}) -> void:
+	%anim_helper.change_anim(\"swing\")
+	
+	%anim_helper.anim_tree.animation_finished.connect(
+		func(_anim_name : String) -> void:
+			state_machine.transition_state(\"idle\")
+	)
+	
+func _state_process(_delta : float) -> void:
+	weapon.update_rotation()
+"
 
 [node name="player_weapon" type="Node2D"]
 script = ExtResource("1_wmmsa")
@@ -105,7 +144,13 @@ offset_bottom = 2.0
 pivot_offset = Vector2(0, 2)
 color = Color(1, 0, 0, 1)
 
+[node name="anim_helper" type="Node" parent="." node_paths=PackedStringArray("anim_tree")]
+unique_name_in_owner = true
+script = ExtResource("3_uj8f8")
+anim_tree = NodePath("../animTree")
+
 [node name="animTree" type="AnimationTree" parent="."]
+unique_name_in_owner = true
 root_node = NodePath(".")
 tree_root = SubResource("AnimationNodeStateMachine_ew63d")
 anim_player = NodePath("anim")
@@ -114,3 +159,13 @@ anim_player = NodePath("anim")
 libraries = {
 "": SubResource("AnimationLibrary_q15ae")
 }
+
+[node name="state_machine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
+script = ExtResource("2_xuvng")
+initial_state = NodePath("idle")
+
+[node name="idle" type="Node" parent="state_machine"]
+script = SubResource("GDScript_pqglh")
+
+[node name="swing" type="Node" parent="state_machine"]
+script = SubResource("GDScript_iui4w")

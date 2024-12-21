@@ -6,7 +6,6 @@ class_name StateMachine extends Node
 
 signal transition(new_state : String)
 
-@export_category("StateMachine")
 ## The initial State of the StateMachine
 @export var initial_state : State
 ## Toggles debug printing
