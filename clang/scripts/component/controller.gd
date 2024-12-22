@@ -38,6 +38,5 @@ func _unhandled_input(event: InputEvent) -> void:
 	throw_pressed = true if event.is_action_pressed("throw") else false
 
 func queue_jump() -> void:
-	print("queue")
 	timer.start()
 	jump_pressed = true

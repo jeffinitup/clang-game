@@ -1,12 +1,16 @@
-[gd_scene load_steps=9 format=3 uid="uid://wgifaqp6m28b"]
+[gd_scene load_steps=11 format=3 uid="uid://wgifaqp6m28b"]
 
 [ext_resource type="Script" path="res://scripts/component/controller.gd" id="1_lng0o"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_q3oqn"]
+[ext_resource type="Script" path="res://scripts/component/hitbox.gd" id="2_inaiw"]
 [ext_resource type="PackedScene" uid="uid://bfbbrwtjg0nnp" path="res://prefab/player_weapon.tscn" id="2_nv7x4"]
 [ext_resource type="Script" path="res://scripts/component/state_machine.gd" id="2_rtogl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_w0fvi"]
 size = Vector2(26, 36)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ui5n8"]
+size = Vector2(22, 30)
 
 [sub_resource type="GDScript" id="GDScript_2u1e1"]
 resource_name = "player_idle"
@@ -102,6 +106,16 @@ offset_right = 16.0
 [node name="col" type="CollisionShape2D" parent="."]
 position = Vector2(0, -18)
 shape = SubResource("RectangleShape2D_w0fvi")
+
+[node name="hbox" type="Area2D" parent="."]
+script = ExtResource("2_inaiw")
+max_hp = 3
+invincibility_time = 1.0
+
+[node name="col" type="CollisionShape2D" parent="hbox"]
+position = Vector2(0, -19)
+shape = SubResource("RectangleShape2D_ui5n8")
+debug_color = Color(1, 0, 0.0166664, 0.419608)
 
 [node name="player_weapon" parent="." instance=ExtResource("2_nv7x4")]
 position = Vector2(0, -18)

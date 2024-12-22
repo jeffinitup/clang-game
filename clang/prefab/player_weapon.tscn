@@ -1,8 +1,12 @@
-[gd_scene load_steps=16 format=3 uid="uid://bfbbrwtjg0nnp"]
+[gd_scene load_steps=18 format=3 uid="uid://bfbbrwtjg0nnp"]
 
 [ext_resource type="Script" path="res://scripts/player_weapon.gd" id="1_wmmsa"]
+[ext_resource type="Script" path="res://scripts/component/damagebox.gd" id="2_8n2xs"]
 [ext_resource type="Script" path="res://scripts/component/state_machine.gd" id="2_xuvng"]
 [ext_resource type="Script" path="res://scripts/component/anim_helper.gd" id="3_uj8f8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1uw8e"]
+size = Vector2(46, 64)
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_kvcqx"]
 animation = &"RESET"
@@ -53,6 +57,42 @@ tracks/1/keys = {
 "update": 0,
 "values": [Vector2(1, 1)]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("%animTree/../dbox/col:disabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("%animTree/../pivot/vis:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [-1.09258]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("%animTree/../pivot/vis:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(19, 12)]
+}
 
 [sub_resource type="Animation" id="Animation_qvtfo"]
 resource_name = "idle"
@@ -85,6 +125,42 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
 "values": [Vector2(1.5, 0.7), Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("%animTree/../dbox/col:disabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("%animTree/../pivot/vis:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("%animTree/../pivot/vis:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(19, -2)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_q15ae"]
@@ -135,14 +211,24 @@ func _state_process(_delta : float) -> void:
 script = ExtResource("1_wmmsa")
 
 [node name="pivot" type="Node2D" parent="."]
+rotation = -1.0472
 
 [node name="vis" type="ColorRect" parent="pivot"]
 offset_left = 19.0
 offset_top = -2.0
 offset_right = 54.0
 offset_bottom = 2.0
+scale = Vector2(1.5, 0.7)
 pivot_offset = Vector2(0, 2)
 color = Color(1, 0, 0, 1)
+
+[node name="dbox" type="Area2D" parent="."]
+script = ExtResource("2_8n2xs")
+
+[node name="col" type="CollisionShape2D" parent="dbox"]
+position = Vector2(36, 0)
+shape = SubResource("RectangleShape2D_1uw8e")
+debug_color = Color(1, 0, 0.0166664, 0.419608)
 
 [node name="anim_helper" type="Node" parent="." node_paths=PackedStringArray("anim_tree")]
 unique_name_in_owner = true
@@ -169,3 +255,5 @@ script = SubResource("GDScript_pqglh")
 
 [node name="swing" type="Node" parent="state_machine"]
 script = SubResource("GDScript_iui4w")
+
+[connection signal="hurtbox_fired" from="dbox" to="." method="debug_print"]

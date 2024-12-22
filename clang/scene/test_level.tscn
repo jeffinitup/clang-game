@@ -1,6 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://b4e7rxcqshnqj"]
+[gd_scene load_steps=4 format=3 uid="uid://b4e7rxcqshnqj"]
 
 [ext_resource type="PackedScene" uid="uid://wgifaqp6m28b" path="res://prefab/player.tscn" id="1_323tv"]
+[ext_resource type="Script" path="res://scripts/component/hitbox.gd" id="2_y3wna"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_keqd1"]
+size = Vector2(39, 39)
 
 [node name="test_level" type="Node2D"]
 
@@ -11,3 +15,13 @@ position = Vector2(159, 311)
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="level"]
 polygon = PackedVector2Array(58, 333, 394, 333, 395, 264, 580, 264, 580, 437, 52, 435)
+
+[node name="test" type="Area2D" parent="."]
+position = Vector2(257, 298)
+script = ExtResource("2_y3wna")
+max_hp = 5
+invincibility_time = 2.0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="test"]
+shape = SubResource("RectangleShape2D_keqd1")
