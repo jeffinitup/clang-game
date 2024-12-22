@@ -1,10 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://wgifaqp6m28b"]
+[gd_scene load_steps=12 format=3 uid="uid://wgifaqp6m28b"]
 
 [ext_resource type="Script" path="res://scripts/component/controller.gd" id="1_lng0o"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_q3oqn"]
 [ext_resource type="Script" path="res://scripts/component/hitbox.gd" id="2_inaiw"]
 [ext_resource type="PackedScene" uid="uid://bfbbrwtjg0nnp" path="res://prefab/player_weapon.tscn" id="2_nv7x4"]
 [ext_resource type="Script" path="res://scripts/component/state_machine.gd" id="2_rtogl"]
+[ext_resource type="Script" path="res://scripts/component/bobble_sprite.gd" id="3_3bxhl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_w0fvi"]
 size = Vector2(26, 36)
@@ -23,9 +24,6 @@ func _enter(_msg := {}) -> void:
 	pass
 
 func _state_physics_process(delta : float) -> void:
-	player.velocity.x += \\
-		player.deacceleration * (-1 if player.velocity.x > 0 else 1)
-	
 	player.update_movement(delta)
 	player.update_physics(delta)
 	
@@ -34,6 +32,9 @@ func _state_physics_process(delta : float) -> void:
 	
 	if player.controller.jump_pressed && player.is_on_floor():
 		state_machine.transition_state(\"airborne\", {\"jumping\" : true})
+	
+	if !player.is_on_floor():
+		state_machine.transition_state(\"airborne\")
 "
 
 [sub_resource type="GDScript" id="GDScript_jqpfa"]
@@ -55,6 +56,9 @@ func _state_physics_process(delta : float) -> void:
 	
 	if player.controller.jump_pressed && player.is_on_floor():
 		state_machine.transition_state(\"airborne\", {\"jumping\" : true})
+		
+	if !player.is_on_floor():
+		state_machine.transition_state(\"airborne\")
 "
 
 [sub_resource type="GDScript" id="GDScript_48wc7"]
@@ -86,24 +90,21 @@ func _state_physics_process(delta : float) -> void:
 "
 
 [node name="player" type="CharacterBody2D"]
+collision_layer = 0
 script = ExtResource("1_q3oqn")
-acceleration = 2.5
-deacceleration = 4.0
-move_speed = 96.0
+acceleration = 3.0
+deacceleration = 5.0
+move_speed = 128.0
 jump_height = 148.0
 jump_time_to_peak = 1.25
 jump_time_to_descent = 0.85
-
-[node name="visual" type="ColorRect" parent="."]
-offset_left = -16.0
-offset_top = -40.0
-offset_right = 16.0
 
 [node name="col" type="CollisionShape2D" parent="."]
 position = Vector2(0, -18)
 shape = SubResource("RectangleShape2D_w0fvi")
 
 [node name="hbox" type="Area2D" parent="."]
+z_index = 1
 script = ExtResource("2_inaiw")
 max_hp = 3
 invincibility_time = 1.0
@@ -112,6 +113,27 @@ invincibility_time = 1.0
 position = Vector2(0, -19)
 shape = SubResource("RectangleShape2D_ui5n8")
 debug_color = Color(1, 0, 0.0166664, 0.419608)
+
+[node name="visual" type="Node2D" parent="."]
+
+[node name="body" type="ColorRect" parent="visual"]
+offset_left = -10.0
+offset_top = -24.0
+offset_right = 10.0
+offset_bottom = -4.0
+
+[node name="head" type="ColorRect" parent="visual"]
+offset_left = -14.0
+offset_top = -41.0
+offset_right = 14.0
+offset_bottom = -21.0
+color = Color(0.205284, 0.388803, 0.626979, 1)
+script = ExtResource("3_3bxhl")
+dampening = 0.16
+tension = 0.07
+max_distance = Vector2(6, -2)
+physics_factor = 0.1
+physics_extents = Vector2(1, 8)
 
 [node name="player_weapon" parent="." instance=ExtResource("2_nv7x4")]
 position = Vector2(0, -18)

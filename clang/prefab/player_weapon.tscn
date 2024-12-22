@@ -210,7 +210,9 @@ func _state_process(_delta : float) -> void:
 	if weapon.surface.is_colliding():
 		weapon.surface.enabled = false
 		var vec := weapon.get_fling_vector()
-		weapon.player.velocity.x += vec.x
+		weapon.player.velocity.x = \\
+		(vec.x if signf(vec.x) != signf(weapon.player.velocity.x) \\
+		else weapon.player.velocity.x + vec.x)
 		weapon.player.velocity.y = vec.y
 
 func _exit() -> void:
