@@ -10,6 +10,7 @@ size = Vector2(39, 39)
 
 [node name="player" parent="." instance=ExtResource("1_323tv")]
 position = Vector2(159, 311)
+acceleration = 3.0
 
 [node name="level" type="StaticBody2D" parent="."]
 
@@ -23,5 +24,5 @@ max_hp = 5
 invincibility_time = 2.0
 metadata/_edit_group_ = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="test"]
+[node name="col" type="CollisionShape2D" parent="test"]
 shape = SubResource("RectangleShape2D_keqd1")

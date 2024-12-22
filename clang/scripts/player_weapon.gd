@@ -2,7 +2,7 @@
 class_name PlayerWeapon extends Node2D
 
 ## Force to knock player back with
-const FORCE : float = 200.0
+const FORCE : float = 250.0
 
 @onready var player := owner as Player
 @onready var dbox := get_node("dbox") as Damagebox

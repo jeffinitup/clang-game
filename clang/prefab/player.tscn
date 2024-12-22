@@ -26,6 +26,7 @@ func _state_physics_process(delta : float) -> void:
 	player.velocity.x += \\
 		player.deacceleration * (-1 if player.velocity.x > 0 else 1)
 	
+	player.update_movement(delta)
 	player.update_physics(delta)
 	
 	if !is_zero_approx(player.controller.movement_vector.x):
@@ -46,14 +47,7 @@ func _enter(_msg := {}) -> void:
 	pass
 
 func _state_physics_process(delta : float) -> void:
-	if !is_zero_approx(player.controller.movement_vector.x) &&\\
-		abs(player.velocity.x) < player.move_speed:
-		player.velocity.x += \\
-		player.acceleration * player.controller.movement_vector.x
-	else:
-		player.velocity.x += \\
-		player.deacceleration * (-1 if player.velocity.x > 0 else 1)
-	
+	player.update_movement(delta)
 	player.update_physics(delta)
 	
 	if is_zero_approx(player.move_speed):
@@ -76,14 +70,7 @@ func _enter(msg := {}) -> void:
 		player.jumping = true
 
 func _state_physics_process(delta : float) -> void:
-	if !is_zero_approx(player.controller.movement_vector.x) &&\\
-		abs(player.velocity.x) < player.move_speed:
-		player.velocity.x += \\
-		(player.acceleration / 2) * player.controller.movement_vector.x
-	elif abs(player.velocity.x) > player.move_speed:
-		player.velocity.x += \\
-		player.deacceleration * (-1 if player.velocity.x > 0 else 1)
-	
+	player.update_air_movement(delta, 0.7)
 	player.update_physics(delta)
 	
 	if player.velocity.y <= 0 && player.jumping:
@@ -100,8 +87,8 @@ func _state_physics_process(delta : float) -> void:
 
 [node name="player" type="CharacterBody2D"]
 script = ExtResource("1_q3oqn")
-acceleration = 2.0
-deacceleration = 3.0
+acceleration = 2.5
+deacceleration = 4.0
 move_speed = 96.0
 jump_height = 148.0
 jump_time_to_peak = 1.25
@@ -146,3 +133,5 @@ script = SubResource("GDScript_jqpfa")
 
 [node name="airborne" type="Node" parent="state_machine"]
 script = SubResource("GDScript_48wc7")
+
+[node name="Camera2D" type="Camera2D" parent="."]

@@ -242,7 +242,7 @@ debug_color = Color(1, 0, 0.0166664, 0.419608)
 
 [node name="surface" type="RayCast2D" parent="."]
 position = Vector2(13, 0)
-target_position = Vector2(46, 0)
+target_position = Vector2(37, 0)
 
 [node name="anim_helper" type="Node" parent="." node_paths=PackedStringArray("anim_tree")]
 unique_name_in_owner = true
