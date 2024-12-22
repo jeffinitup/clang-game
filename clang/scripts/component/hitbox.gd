@@ -16,6 +16,8 @@ signal hitbox_death()
 @onready var hp : int = max_hp
 ## Invulnerability timer
 var i_timer : Timer
+## Debug font
+@onready var font = preload("res://asset/font/PixelOperatorMono.ttf")
 
 func _ready() -> void:
 	# Create inv timer
@@ -25,12 +27,15 @@ func _ready() -> void:
 	add_child(i_timer)
 	
 	# Put on hitbox layer
-	collision_layer = 1 << 1
-	collision_mask = 1 << 1
+	collision_layer |= 1 << 1
+	collision_mask |= 1 << 1
 	
 	# Connect signals
 	hitbox_harmed.connect(harmed.bind())
 	i_timer.timeout.connect(invulnerability_done.bind())
+
+func _draw() -> void:
+	draw_string(font, get_child(0).position, "%02d/%02d" % [hp, max_hp])
 
 func harmed(packet : Damagebox.DamagePacket) -> void:
 	# Apply damage and knockback
@@ -41,6 +46,9 @@ func harmed(packet : Damagebox.DamagePacket) -> void:
 	# Die if applicable
 	if hp <= 0:
 		hitbox_death.emit()
+	
+	# Redraw debug
+	queue_redraw()
 	
 	# Invuln
 	for child in get_children():
