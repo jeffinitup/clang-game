@@ -23,12 +23,15 @@ func _enter(_msg := {}) -> void:
 	pass
 
 func _state_physics_process(delta : float) -> void:
+	player.velocity.x += \\
+		player.deacceleration * (-1 if player.velocity.x > 0 else 1)
+	
 	player.update_physics(delta)
 	
-	if !is_zero_approx(%controller.movement_vector.x):
+	if !is_zero_approx(player.controller.movement_vector.x):
 		state_machine.transition_state(\"move\")
 	
-	if %controller.jump_pressed && player.is_on_floor():
+	if player.controller.jump_pressed && player.is_on_floor():
 		state_machine.transition_state(\"airborne\", {\"jumping\" : true})
 "
 
@@ -43,18 +46,20 @@ func _enter(_msg := {}) -> void:
 	pass
 
 func _state_physics_process(delta : float) -> void:
-	player.velocity.x = lerp(
-		player.velocity.x,
-		player.move_speed * %controller.movement_vector.x,
-		player.acceleration if !is_zero_approx(%controller.movement_vector.x) else player.deacceleration
-	)
+	if !is_zero_approx(player.controller.movement_vector.x) &&\\
+		abs(player.velocity.x) < player.move_speed:
+		player.velocity.x += \\
+		player.acceleration * player.controller.movement_vector.x
+	else:
+		player.velocity.x += \\
+		player.deacceleration * (-1 if player.velocity.x > 0 else 1)
 	
 	player.update_physics(delta)
 	
 	if is_zero_approx(player.move_speed):
 		state_machine.transition_state(\"idle\")
 	
-	if %controller.jump_pressed && player.is_on_floor():
+	if player.controller.jump_pressed && player.is_on_floor():
 		state_machine.transition_state(\"airborne\", {\"jumping\" : true})
 "
 
@@ -71,11 +76,13 @@ func _enter(msg := {}) -> void:
 		player.jumping = true
 
 func _state_physics_process(delta : float) -> void:
-	player.velocity.x = lerp(
-		player.velocity.x,
-		player.move_speed * %controller.movement_vector.x,
-		player.acceleration if !is_zero_approx(%controller.movement_vector.x) else player.deacceleration
-	)
+	if !is_zero_approx(player.controller.movement_vector.x) &&\\
+		abs(player.velocity.x) < player.move_speed:
+		player.velocity.x += \\
+		(player.acceleration / 2) * player.controller.movement_vector.x
+	elif abs(player.velocity.x) > player.move_speed:
+		player.velocity.x += \\
+		player.deacceleration * (-1 if player.velocity.x > 0 else 1)
 	
 	player.update_physics(delta)
 	
@@ -93,6 +100,8 @@ func _state_physics_process(delta : float) -> void:
 
 [node name="player" type="CharacterBody2D"]
 script = ExtResource("1_q3oqn")
+acceleration = 2.0
+deacceleration = 3.0
 move_speed = 96.0
 jump_height = 148.0
 jump_time_to_peak = 1.25

@@ -184,7 +184,7 @@ func _state_process(_delta : float) -> void:
 	weapon.update_rotation()
 
 func _state_unhandled_input(_event : InputEvent) -> void:
-	if weapon.player.player_controller.swing_pressed:
+	if weapon.player.controller.swing_pressed:
 		state_machine.transition_state(\"swing\")
 "
 
@@ -197,6 +197,7 @@ extends State
 
 func _enter(_msg := {}) -> void:
 	%anim_helper.change_anim(\"swing\")
+	weapon.surface.enabled = true
 	
 	%anim_helper.anim_tree.animation_finished.connect(
 		func(_anim_name : String) -> void:
@@ -205,6 +206,15 @@ func _enter(_msg := {}) -> void:
 	
 func _state_process(_delta : float) -> void:
 	weapon.update_rotation()
+	
+	if weapon.surface.is_colliding():
+		weapon.surface.enabled = false
+		var vec := weapon.get_fling_vector()
+		weapon.player.velocity.x += vec.x
+		weapon.player.velocity.y = vec.y
+
+func _exit() -> void:
+	weapon.surface.enabled = false
 "
 
 [node name="player_weapon" type="Node2D"]
@@ -229,6 +239,10 @@ script = ExtResource("2_8n2xs")
 position = Vector2(36, 0)
 shape = SubResource("RectangleShape2D_1uw8e")
 debug_color = Color(1, 0, 0.0166664, 0.419608)
+
+[node name="surface" type="RayCast2D" parent="."]
+position = Vector2(13, 0)
+target_position = Vector2(46, 0)
 
 [node name="anim_helper" type="Node" parent="." node_paths=PackedStringArray("anim_tree")]
 unique_name_in_owner = true
