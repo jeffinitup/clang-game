@@ -223,14 +223,13 @@ func _exit() -> void:
 script = ExtResource("1_wmmsa")
 
 [node name="pivot" type="Node2D" parent="."]
-rotation = 0.975373
 
 [node name="vis" type="ColorRect" parent="pivot"]
 offset_left = 19.0
-offset_top = -2.0
+offset_top = 12.0
 offset_right = 54.0
-offset_bottom = 2.0
-scale = Vector2(1.05556, 0.966667)
+offset_bottom = 16.0
+rotation = -1.09258
 pivot_offset = Vector2(0, 2)
 color = Color(1, 0, 0, 1)
 
@@ -240,6 +239,7 @@ script = ExtResource("2_8n2xs")
 [node name="col" type="CollisionShape2D" parent="dbox"]
 position = Vector2(36, 0)
 shape = SubResource("RectangleShape2D_1uw8e")
+disabled = true
 debug_color = Color(1, 0, 0.0166664, 0.419608)
 
 [node name="surface" type="RayCast2D" parent="."]

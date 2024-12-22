@@ -39,6 +39,6 @@ func interpret_velocity(delta : float) -> Vector2:
 	var interpret = (current_spd / max_spd) * -physics_factor
 	
 	return Vector2(
-		clampf(interpret.x, -physics_extents.x, physics_extents.y),
+		clampf(interpret.x, -physics_extents.x, physics_extents.x),
 		clampf(interpret.y, -physics_extents.y, physics_extents.y)
 	)

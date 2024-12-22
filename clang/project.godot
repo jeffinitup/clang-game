@@ -12,7 +12,7 @@ config_version=5
 
 config/name="CLANG"
 config/description="Metroidvania boss fighty fight game"
-run/main_scene="res://scene/test_level.tscn"
+run/main_scene="res://scene/main.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
 boot_splash/bg_color=Color(0.068888, 0.0530118, 0.040212, 1)
 boot_splash/show_image=false
@@ -24,7 +24,14 @@ config/icon="res://icon.svg"
 
 window/size/viewport_width=640
 window/size/viewport_height=480
-window/stretch/mode="canvas_items"
+window/size/mode=4
+window/size/borderless=true
+window/stretch/mode="viewport"
+window/stretch/scale_mode="integer"
+
+[gui]
+
+fonts/dynamic_fonts/use_oversampling=false
 
 [input]
 
@@ -71,5 +78,7 @@ throw={
 
 [rendering]
 
+textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+anti_aliasing/screen_space_roughness_limiter/enabled=false

@@ -35,7 +35,12 @@ func _ready() -> void:
 	i_timer.timeout.connect(invulnerability_done.bind())
 
 func _draw() -> void:
-	draw_string(font, get_child(0).position, "%02d/%02d" % [hp, max_hp])
+	draw_string(font, get_child(0).position + Vector2.DOWN * 36, "%02d/%02d" % [hp, max_hp])
+	if owner is CharacterBody2D:
+		draw_string(font, get_child(0).position + Vector2.DOWN * 48, "%d" % owner.velocity.x)
+
+func _process(_delta: float) -> void:
+	queue_redraw()
 
 func harmed(packet : Damagebox.DamagePacket) -> void:
 	# Apply damage and knockback
@@ -46,9 +51,6 @@ func harmed(packet : Damagebox.DamagePacket) -> void:
 	# Die if applicable
 	if hp <= 0:
 		hitbox_death.emit()
-	
-	# Redraw debug
-	queue_redraw()
 	
 	# Invuln
 	for child in get_children():

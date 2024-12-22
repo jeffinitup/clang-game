@@ -1,16 +1,20 @@
-[gd_scene load_steps=4 format=3 uid="uid://b4e7rxcqshnqj"]
+[gd_scene load_steps=5 format=3 uid="uid://b4e7rxcqshnqj"]
 
 [ext_resource type="PackedScene" uid="uid://wgifaqp6m28b" path="res://prefab/player.tscn" id="1_323tv"]
 [ext_resource type="Script" path="res://scripts/component/hitbox.gd" id="2_y3wna"]
+
+[sub_resource type="GDScript" id="GDScript_aq11h"]
+script/source = "extends Node2D
+"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_keqd1"]
 size = Vector2(39, 39)
 
 [node name="test_level" type="Node2D"]
+script = SubResource("GDScript_aq11h")
 
 [node name="player" parent="." instance=ExtResource("1_323tv")]
 position = Vector2(159, 311)
-acceleration = 3.0
 
 [node name="level" type="StaticBody2D" parent="."]
 

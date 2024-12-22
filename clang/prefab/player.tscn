@@ -131,9 +131,9 @@ color = Color(0.205284, 0.388803, 0.626979, 1)
 script = ExtResource("3_3bxhl")
 dampening = 0.16
 tension = 0.07
-max_distance = Vector2(6, -2)
-physics_factor = 0.1
-physics_extents = Vector2(1, 8)
+max_distance = Vector2(6, -4)
+physics_factor = 0.05
+physics_extents = Vector2(3, 8)
 
 [node name="player_weapon" parent="." instance=ExtResource("2_nv7x4")]
 position = Vector2(0, -18)
