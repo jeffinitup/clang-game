@@ -74,6 +74,7 @@ func level_setup(ps : PackedScene, sc : SceneContext) -> void:
 	
 	# Hook up signals
 	current_scene = current_scene as Level
+	hud.minimap.player = player
 	
 	current_scene.reload_requested.connect(load_scene_packed.bind(ps, sc))
 	current_scene.cells_populated.connect(hud.minimap.cells_updated.bind())

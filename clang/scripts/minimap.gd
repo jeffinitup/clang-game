@@ -8,13 +8,13 @@ var player_cell : Level.CellData
 ## Mirror of player's current cell position
 var player_pos : Vector2i
 ## Player reference
-@onready var player : Player = get_tree().get_first_node_in_group("player")
+var player : Player
 
 func _draw() -> void:
 	var TRANSPARENT := Color(Color.DARK_GRAY, 0.5)
 	var SOLID := Color.WHITE
 	var CELL := Color.DIM_GRAY
-	var MY_CELL := Color.RED
+	var MY_CELL := Color.WHITE
 	
 	var CENTER := Vector2i(size / 2)
 	var MARGIN := Vector2(1, 1)
@@ -25,6 +25,8 @@ func _draw() -> void:
 	for cell in cells:
 		var cpos := cell.pos * SIZE + ((CENTER + -player_pos * SIZE) - SIZE / 2)
 		var csize := cell.size * SIZE
+		var markers : Array[MapMarker] = cell.markers
+		
 		draw_rect(
 			Rect2i(cpos, csize), 
 			Color(CELL, 0.4) if cell != player_cell else Color(MY_CELL, 0.4), true
@@ -33,17 +35,23 @@ func _draw() -> void:
 			Rect2i(Vector2(cpos) + MARGIN, Vector2(csize) - MARGIN),
 			CELL if cell != player_cell else MY_CELL, false
 		)
+		
+		for marker in markers:
+			var mpos := Vector2i(marker.global_position) / 32 + ((CENTER + -player_pos * SIZE) - SIZE / 2)
+			draw_rect(Rect2i(mpos, Vector2i(2,2)), Color.RED, true)
 	
 	draw_rect(
 		Rect2i(
-			Vector2i((wrapi(player.position.x, 0, 640)), wrapi(player.position.y, 0, 480)
-			) / 32 + CENTER - SIZE / 2,
+			Vector2i(
+				(wrapi(player.position.x, 0, 640)) - 1, 
+				wrapi(player.position.y, 0, 480) - 1)\
+				/ 32 + CENTER - SIZE / 2,
 			Vector2i(2,2)
 		),
 		SOLID, true
 	)
 	
-	draw_rect(Rect2i(MARGIN, size - MARGIN), SOLID, false)
+	draw_rect(Rect2i(MARGIN, size - MARGIN * 2), SOLID, false, 2)
 
 func _process(delta: float) -> void:
 	queue_redraw()

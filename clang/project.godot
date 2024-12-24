@@ -34,6 +34,7 @@ window/stretch/scale_mode="integer"
 [global_group]
 
 player="Player node."
+map_marker="Renders on minimap."
 
 [gui]
 

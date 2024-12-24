@@ -24,15 +24,26 @@ func _unhandled_input(event: InputEvent) -> void:
 
 ## Iterates through children and creates a set of cell data
 func populate_cells() -> void:
+	var markers := get_tree().get_nodes_in_group("map_marker")
+	
 	for child in get_children():
 		if child is not LevelCell:
 			continue
+		
+		var my_markers : Array[MapMarker] = []
+		for marker in markers:
+			if child.is_ancestor_of(marker):
+				my_markers.append(marker)
+		
 		cells.append(
 			CellData.new(
 				Vector2i(child.position / Vector2(640,480)), 
-				child.cell_size
+				child.cell_size,
+				false,
+				my_markers
 			)
 		)
+		
 	cells_populated.emit(cells)
 
 ## Called when player enters new cell
@@ -56,8 +67,14 @@ class CellData extends Resource:
 	var pos : Vector2i
 	var size : Vector2i
 	var explored : bool
+	var markers : Array[MapMarker]
 	
-	func _init(pos : Vector2i, size : Vector2i, explored : bool = false):
-		self.pos = pos
-		self.size = size
-		self.explored = explored
+	func _init(
+		cdpos : Vector2i, 
+		cdsize : Vector2i, 
+		cdexplored : bool = false,
+		cdmarkers : Array[MapMarker] = []):
+		self.pos = cdpos
+		self.size = cdsize
+		self.explored = cdexplored
+		self.markers = cdmarkers

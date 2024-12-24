@@ -62,6 +62,9 @@ func _state_physics_process(delta : float) -> void:
 		
 	if !player.is_on_floor():
 		state_machine.transition_state(\"airborne\")
+	
+	if (player.controller.debug_pressed):
+		state_machine.transition_state(\"debug\")
 "
 
 [sub_resource type="GDScript" id="GDScript_48wc7"]
@@ -90,6 +93,9 @@ func _state_physics_process(delta : float) -> void:
 		else:
 			state_machine.transition_state(\"move\")
 		return
+	
+	if (player.controller.debug_pressed):
+		state_machine.transition_state(\"debug\")
 "
 
 [sub_resource type="GDScript" id="GDScript_wbs7e"]
@@ -100,7 +106,7 @@ extends State
 @onready var player = owner as Player
 
 func _enter(_msg := {}) -> void:
-	pass
+	player.velocity = Vector2.ZERO
 
 func _state_physics_process(delta : float) -> void:
 	player.position += player.controller.movement_vector * 400 * delta

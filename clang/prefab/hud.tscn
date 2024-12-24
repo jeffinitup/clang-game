@@ -21,7 +21,7 @@ metadata/_edit_use_anchors_ = true
 [node name="minimap" type="Control" parent="margins"]
 unique_name_in_owner = true
 clip_contents = true
-custom_minimum_size = Vector2(100, 80)
+custom_minimum_size = Vector2(120, 100)
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 0

@@ -32,7 +32,7 @@ polygon = PackedVector2Array(215, 345, 412, 347, 412, 393, 216, 390)
 polygon = PackedVector2Array(58, 333, 394, 333, 395, 264, 580, 264, 580, 437, 52, 435)
 
 [node name="test" type="Area2D" parent="."]
-position = Vector2(257, 298)
+position = Vector2(497, 91)
 script = ExtResource("2_y3wna")
 max_hp = 5
 invincibility_time = 2.0
