@@ -3,19 +3,24 @@ class_name Level extends Node2D
 
 ## Fired when reload is requested
 signal reload_requested()
+## Fired when cells are populated
+signal cells_populated(cells : Array[CellData])
+## Fired when player enters new cell
+signal player_in_new_cell(cell : CellData)
 
 ## List of cells
 var cells : Array[CellData]
 ## Cell player is currently in
-var player_cell : CellData
-
-func _ready() -> void:
-	populate_cells()
-
+var player_cell : CellData :
+	set(value) : 
+		player_cell = value
+		player_in_new_cell.emit(player_cell)
+	get : return player_cell
+	
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey:
 		if event.keycode == KEY_R && event.pressed:
-			get_tree().reload_current_scene()
+			reload_requested.emit()
 
 ## Iterates through children and creates a set of cell data
 func populate_cells() -> void:
@@ -28,6 +33,24 @@ func populate_cells() -> void:
 				child.cell_size
 			)
 		)
+	cells_populated.emit(cells)
+
+## Called when player enters new cell
+func player_entered_cell(pos : Vector2i) -> void:
+	print("Player in cell %d x %d y" % [pos.x, pos.y])
+	set_deferred("player_cell", get_cell_at(pos))
+
+## Finds cell that occupies provided space
+func get_cell_at(pos : Vector2i) -> CellData:
+	for cell in cells:
+		var cell_pos := cell.pos
+		var cell_size := cell.size
+		for x in range(cell_size.x):
+			for y in range(cell_size.y):
+				if pos == Vector2i(cell_pos.x + x, cell_pos.y + y):
+					print("Cell found at %d x %d y" % [pos.x, pos.y])
+					return cell
+	return null
 
 class CellData extends Resource:
 	var pos : Vector2i

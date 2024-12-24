@@ -10,6 +10,8 @@ enum Scenes {
 @export var start : PackedScene
 ## Reference to player scene
 @onready var player_scene := preload("uid://wgifaqp6m28b")
+## Reference to hud
+@onready var hud_scene := preload("uid://vpjmjy4c6tcy")
 ## Currently loaded scene
 var current_scene : Node
 ## Player reference
@@ -29,7 +31,7 @@ func load_scene_packed(
 	add_child(current_scene)
 	
 	if current_scene is Level:
-		level_setup(sc)
+		level_setup(ps, sc)
 		
 	return current_scene
 
@@ -51,7 +53,7 @@ func id_to_path(id : int) -> String:
 		Scenes.TEST_LEVEL:					return "uid://cw0732uifkxxm"
 		_:									return ""
 		
-func level_setup(sc : SceneContext) -> void:
+func level_setup(ps : PackedScene, sc : SceneContext) -> void:
 	# Get player start point
 	var pos : Vector2 = Vector2.ZERO
 	for spawn in get_tree().get_nodes_in_group("player_spawn"):
@@ -66,9 +68,22 @@ func level_setup(sc : SceneContext) -> void:
 	current_scene.add_child(player)
 	player.position = pos
 	
+	# Create hud
+	var hud : HUD = hud_scene.instantiate()
+	current_scene.add_child(hud)
+	
 	# Hook up signals
 	current_scene = current_scene as Level
-	current_scene.reload_requested.connect()
+	
+	current_scene.reload_requested.connect(load_scene_packed.bind(ps, sc))
+	current_scene.cells_populated.connect(hud.minimap.cells_updated.bind())
+	current_scene.player_in_new_cell.connect(hud.minimap.pcell_updated.bind())
+	
+	player.entered_cell.connect(current_scene.player_entered_cell.bind())
+	player.entered_cell.connect(hud.minimap.ppos_updated.bind())
+	
+	current_scene.populate_cells()
+	
 
 class SceneContext extends Resource:
 	var warp_id : int = 0

@@ -1,20 +1,14 @@
 [gd_scene load_steps=5 format=3 uid="uid://b4e7rxcqshnqj"]
 
-[ext_resource type="PackedScene" uid="uid://wgifaqp6m28b" path="res://prefab/player.tscn" id="1_323tv"]
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_cql3w"]
+[ext_resource type="Script" path="res://scripts/player_spawn.gd" id="2_7j4nj"]
 [ext_resource type="Script" path="res://scripts/component/hitbox.gd" id="2_y3wna"]
-
-[sub_resource type="GDScript" id="GDScript_aq11h"]
-script/source = "extends Node2D
-"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_keqd1"]
 size = Vector2(39, 39)
 
 [node name="test_level" type="Node2D"]
-script = SubResource("GDScript_aq11h")
-
-[node name="player" parent="." instance=ExtResource("1_323tv")]
-position = Vector2(159, 311)
+script = ExtResource("1_cql3w")
 
 [node name="level" type="StaticBody2D" parent="."]
 
@@ -46,3 +40,7 @@ metadata/_edit_group_ = true
 
 [node name="col" type="CollisionShape2D" parent="test"]
 shape = SubResource("RectangleShape2D_keqd1")
+
+[node name="PlayerSpawn" type="Marker2D" parent="."]
+position = Vector2(132, 295)
+script = ExtResource("2_7j4nj")

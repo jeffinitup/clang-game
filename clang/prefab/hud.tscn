@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://vpjmjy4c6tcy"]
+
+[ext_resource type="Script" path="res://scripts/hud.gd" id="1_al635"]
+[ext_resource type="Script" path="res://scripts/minimap.gd" id="2_uri2m"]
+
+[node name="hud" type="CanvasLayer"]
+script = ExtResource("1_al635")
+
+[node name="margins" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+metadata/_edit_use_anchors_ = true
+
+[node name="minimap" type="Control" parent="margins"]
+unique_name_in_owner = true
+clip_contents = true
+custom_minimum_size = Vector2(100, 80)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+script = ExtResource("2_uri2m")

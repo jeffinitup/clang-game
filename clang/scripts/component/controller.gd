@@ -12,6 +12,8 @@ var jump_pressed : bool = false
 var swing_pressed : bool = false
 ## Whether or not throw is pressed
 var throw_pressed : bool = false
+## Whether or not debug is pressed
+var debug_pressed : bool = false
 
 ## Input queueing timer
 var timer : Timer
@@ -29,13 +31,14 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	# Update movement vector
-	movement_vector = Input.get_vector("left", "right", "down", "up")
+	movement_vector = Input.get_vector("left", "right", "up", "down")
 
 func _unhandled_input(event: InputEvent) -> void:
 	# Update booleans
 	if event.is_action_pressed("jump"): queue_jump()
 	swing_pressed = true if event.is_action_pressed("swing") else false
 	throw_pressed = true if event.is_action_pressed("throw") else false
+	debug_pressed = true if event.is_action_pressed("debug") else false
 
 func queue_jump() -> void:
 	timer.start()

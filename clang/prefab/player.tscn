@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://wgifaqp6m28b"]
+[gd_scene load_steps=13 format=3 uid="uid://wgifaqp6m28b"]
 
 [ext_resource type="Script" path="res://scripts/component/controller.gd" id="1_lng0o"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_q3oqn"]
@@ -35,6 +35,9 @@ func _state_physics_process(delta : float) -> void:
 	
 	if !player.is_on_floor():
 		state_machine.transition_state(\"airborne\")
+		
+	if (player.controller.debug_pressed):
+		state_machine.transition_state(\"debug\")
 "
 
 [sub_resource type="GDScript" id="GDScript_jqpfa"]
@@ -51,7 +54,7 @@ func _state_physics_process(delta : float) -> void:
 	player.update_movement(delta)
 	player.update_physics(delta)
 	
-	if is_zero_approx(player.move_speed):
+	if is_zero_approx(player.velocity.x):
 		state_machine.transition_state(\"idle\")
 	
 	if player.controller.jump_pressed && player.is_on_floor():
@@ -89,7 +92,23 @@ func _state_physics_process(delta : float) -> void:
 		return
 "
 
-[node name="player" type="CharacterBody2D"]
+[sub_resource type="GDScript" id="GDScript_wbs7e"]
+resource_name = "player_debug"
+script/source = "### player_debug.gd
+extends State
+
+@onready var player = owner as Player
+
+func _enter(_msg := {}) -> void:
+	pass
+
+func _state_physics_process(delta : float) -> void:
+	player.position += player.controller.movement_vector * 400 * delta
+	if (player.controller.jump_pressed):
+		state_machine.transition_state(\"airborne\")
+"
+
+[node name="player" type="CharacterBody2D" groups=["player"]]
 collision_layer = 0
 script = ExtResource("1_q3oqn")
 acceleration = 3.0
@@ -131,7 +150,7 @@ color = Color(0.205284, 0.388803, 0.626979, 1)
 script = ExtResource("3_3bxhl")
 dampening = 0.16
 tension = 0.07
-max_distance = Vector2(6, -4)
+max_distance = Vector2(6, 4)
 physics_factor = 0.05
 physics_extents = Vector2(3, 8)
 
@@ -155,5 +174,8 @@ script = SubResource("GDScript_jqpfa")
 
 [node name="airborne" type="Node" parent="state_machine"]
 script = SubResource("GDScript_48wc7")
+
+[node name="debug" type="Node" parent="state_machine"]
+script = SubResource("GDScript_wbs7e")
 
 [node name="Camera2D" type="Camera2D" parent="."]
