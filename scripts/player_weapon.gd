@@ -14,7 +14,7 @@ func get_fling_vector() -> Vector2:
 	return Vector2.RIGHT.rotated(rot) * FORCE
 
 func update_rotation() -> void:
-	var mouse_pos : Vector2i = player.get_local_mouse_position()
+	var mouse_pos : Vector2 = owner.cursor.position - owner.cursor.origin
 	rotation = atan2(mouse_pos.y, mouse_pos.x)
 	scale.y = -1 if mouse_pos.x < 0 else 1
 

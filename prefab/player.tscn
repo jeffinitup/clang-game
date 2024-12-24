@@ -1,7 +1,8 @@
-[gd_scene load_steps=14 format=3 uid="uid://wgifaqp6m28b"]
+[gd_scene load_steps=15 format=3 uid="uid://wgifaqp6m28b"]
 
 [ext_resource type="Script" path="res://scripts/component/controller.gd" id="1_lng0o"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_q3oqn"]
+[ext_resource type="Script" path="res://scripts/cursor.gd" id="2_81xmq"]
 [ext_resource type="Script" path="res://scripts/component/hitbox.gd" id="2_inaiw"]
 [ext_resource type="PackedScene" uid="uid://bfbbrwtjg0nnp" path="res://prefab/player_weapon.tscn" id="2_nv7x4"]
 [ext_resource type="Script" path="res://scripts/component/state_machine.gd" id="2_rtogl"]
@@ -140,6 +141,17 @@ jump_time_to_descent = 0.85
 [node name="col" type="CollisionShape2D" parent="."]
 position = Vector2(0, -18)
 shape = SubResource("RectangleShape2D_w0fvi")
+
+[node name="cursor" type="Node2D" parent="."]
+position = Vector2(0, -18)
+script = ExtResource("2_81xmq")
+metadata/_edit_group_ = true
+
+[node name="vis" type="ColorRect" parent="cursor"]
+offset_left = -3.0
+offset_top = -3.0
+offset_right = 3.0
+offset_bottom = 3.0
 
 [node name="hbox" type="Area2D" parent="."]
 z_index = 1

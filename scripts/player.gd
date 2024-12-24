@@ -10,6 +10,7 @@ const DELIMITER : float = 8.0
 const SPEED_CAP : float = 300.0
 
 @onready var controller := get_node("%controller") as Controller
+@onready var cursor := get_node("cursor") as Cursor
 @onready var player_weapon := get_node("player_weapon") as PlayerWeapon
 @onready var hbox := get_node("hbox") as Hitbox
 

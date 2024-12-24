@@ -11,3 +11,6 @@ func _ready() -> void:
 		var sl := get_tree().current_scene.get_node("scene_loader") as SceneLoader
 		await sl.ready
 		sl.load_scene(path)
+	
+	# Capture mouse
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED

@@ -11,7 +11,7 @@ var player_pos : Vector2i
 var player : Player
 
 func _draw() -> void:
-	var TRANSPARENT := Color(Color.DARK_GRAY, 0.5)
+	var TRANSPARENT := Color(Color.DIM_GRAY, 0.5)
 	var SOLID := Color.WHITE
 	var CELL := Color.DIM_GRAY
 	var MY_CELL := Color.WHITE
