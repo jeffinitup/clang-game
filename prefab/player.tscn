@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://wgifaqp6m28b"]
+[gd_scene load_steps=14 format=3 uid="uid://wgifaqp6m28b"]
 
 [ext_resource type="Script" path="res://scripts/component/controller.gd" id="1_lng0o"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_q3oqn"]
@@ -12,6 +12,19 @@ size = Vector2(26, 36)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ui5n8"]
 size = Vector2(22, 30)
+
+[sub_resource type="GDScript" id="GDScript_guo3q"]
+resource_name = "bobble_line"
+script/source = "extends Line2D
+
+## Head of robot (anchor point 1)
+@onready var head : ColorRect = get_parent().get_node(\"head\")
+## Bobble of robot (anchor point 2)
+@onready var bobble : ColorRect = get_parent().get_node(\"bobble\")
+
+func _process(_delta: float) -> void:
+	points = [head.position + Vector2(head.size.x, 0) / 2, bobble.position + bobble.size / 2]
+"
 
 [sub_resource type="GDScript" id="GDScript_2u1e1"]
 resource_name = "player_idle"
@@ -146,6 +159,28 @@ offset_left = -10.0
 offset_top = -24.0
 offset_right = 10.0
 offset_bottom = -4.0
+
+[node name="bobble_line" type="Line2D" parent="visual"]
+points = PackedVector2Array(0, -41, 0, -44)
+width = 2.0
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+antialiased = true
+script = SubResource("GDScript_guo3q")
+
+[node name="bobble" type="ColorRect" parent="visual"]
+offset_left = -3.0
+offset_top = -50.0
+offset_right = 3.0
+offset_bottom = -44.0
+pivot_offset = Vector2(3, 3)
+script = ExtResource("3_3bxhl")
+dampening = 0.06
+tension = 0.02
+max_distance = Vector2(5, 5)
+physics_factor = 0.12
+physics_extents = Vector2(15, 24)
 
 [node name="head" type="ColorRect" parent="visual"]
 offset_left = -14.0
