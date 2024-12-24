@@ -56,11 +56,10 @@ func get_cell_at(pos : Vector2i) -> CellData:
 	for cell in cells:
 		var cell_pos := cell.pos
 		var cell_size := cell.size
-		for x in range(cell_size.x):
-			for y in range(cell_size.y):
-				if pos == Vector2i(cell_pos.x + x, cell_pos.y + y):
-					print("Cell found at %d x %d y" % [pos.x, pos.y])
-					return cell
+		if pos.x >= cell_pos.x && pos.x <= cell_pos.x + cell_size.x - 1 &&\
+		pos.y >= cell_pos.y && pos.y <= cell_pos.y + cell_size.y - 1:
+			print("Cell found at %d x %d y" % [pos.x, pos.y])
+			return cell
 	return null
 
 class CellData extends Resource:

@@ -116,3 +116,8 @@ script = ExtResource("2_6t8sc")
 position = Vector2(1280, -960)
 script = ExtResource("2_6t8sc")
 cell_size = Vector2i(1, 2)
+
+[node name="cell5" type="Node2D" parent="."]
+position = Vector2(-640, 0)
+script = ExtResource("2_6t8sc")
+cell_size = Vector2i(1, 2)

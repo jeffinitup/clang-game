@@ -10,8 +10,10 @@ enum Scenes {
 @export var start : PackedScene
 ## Reference to player scene
 @onready var player_scene := preload("uid://wgifaqp6m28b")
-## Reference to hud
+## Reference to hud scene
 @onready var hud_scene := preload("uid://vpjmjy4c6tcy")
+## Reference to player cam scene
+@onready var player_cam_scene := preload("uid://bw2l1ho8qfa70")
 ## Currently loaded scene
 var current_scene : Node
 ## Player reference
@@ -68,6 +70,10 @@ func level_setup(ps : PackedScene, sc : SceneContext) -> void:
 	current_scene.add_child(player)
 	player.position = pos
 	
+	# Create camera
+	var camera : PlayerCam = player_cam_scene.instantiate()
+	player.add_child(camera)
+	
 	# Create hud
 	var hud : HUD = hud_scene.instantiate()
 	current_scene.add_child(hud)
@@ -79,6 +85,7 @@ func level_setup(ps : PackedScene, sc : SceneContext) -> void:
 	current_scene.reload_requested.connect(load_scene_packed.bind(ps, sc))
 	current_scene.cells_populated.connect(hud.minimap.cells_updated.bind())
 	current_scene.player_in_new_cell.connect(hud.minimap.pcell_updated.bind())
+	current_scene.player_in_new_cell.connect(camera.set_constraints.bind())
 	
 	player.entered_cell.connect(current_scene.player_entered_cell.bind())
 	player.entered_cell.connect(hud.minimap.ppos_updated.bind())

@@ -183,5 +183,3 @@ script = SubResource("GDScript_48wc7")
 
 [node name="debug" type="Node" parent="state_machine"]
 script = SubResource("GDScript_wbs7e")
-
-[node name="Camera2D" type="Camera2D" parent="."]
