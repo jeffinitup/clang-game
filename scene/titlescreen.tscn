@@ -1,0 +1,128 @@
+[gd_scene load_steps=15 format=3 uid="uid://cddkj86qmc2fi"]
+
+[ext_resource type="FontFile" uid="uid://dreclkhvqjl2p" path="res://asset/font/DeltaBlock-Regular.ttf" id="1_6yf7h"]
+[ext_resource type="Script" path="res://scripts/titlescreen.gd" id="1_h8vcp"]
+[ext_resource type="FontFile" uid="uid://ignnmxnvl5os" path="res://asset/font/PixelOperatorMono.ttf" id="3_joxcs"]
+
+[sub_resource type="FontVariation" id="FontVariation_w61ex"]
+base_font = ExtResource("1_6yf7h")
+spacing_glyph = -2
+spacing_top = -28
+spacing_bottom = -14
+
+[sub_resource type="LabelSettings" id="LabelSettings_6iq40"]
+line_spacing = 0.0
+font = SubResource("FontVariation_w61ex")
+font_size = 96
+outline_size = 4
+outline_color = Color(0.196078, 0.196078, 0.196078, 1)
+shadow_color = Color(0.197937, 0.197937, 0.197937, 1)
+shadow_offset = Vector2(4, 4)
+
+[sub_resource type="LabelSettings" id="LabelSettings_x85us"]
+line_spacing = 0.0
+font = SubResource("FontVariation_w61ex")
+font_size = 96
+font_color = Color(0.2, 0.2, 0.2, 0.541176)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yxrgl"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sqvrg"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_i8y1b"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_beguf"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vee48"]
+
+[sub_resource type="Theme" id="Theme_rn3ja"]
+default_font = ExtResource("3_joxcs")
+Button/styles/disabled = SubResource("StyleBoxEmpty_yxrgl")
+Button/styles/focus = SubResource("StyleBoxEmpty_sqvrg")
+Button/styles/hover = SubResource("StyleBoxEmpty_i8y1b")
+Button/styles/normal = SubResource("StyleBoxEmpty_beguf")
+Button/styles/pressed = SubResource("StyleBoxEmpty_vee48")
+
+[sub_resource type="FontVariation" id="FontVariation_3w7tl"]
+base_font = ExtResource("3_joxcs")
+spacing_top = -28
+spacing_bottom = -14
+
+[sub_resource type="LabelSettings" id="LabelSettings_dbbi2"]
+line_spacing = 0.0
+font = SubResource("FontVariation_3w7tl")
+outline_color = Color(0.196078, 0.196078, 0.196078, 1)
+shadow_size = 0
+shadow_color = Color(0.197937, 0.197937, 0.197937, 1)
+
+[node name="titlescreen" type="Node"]
+script = ExtResource("1_h8vcp")
+
+[node name="margin" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+metadata/_edit_lock_ = true
+
+[node name="title" type="Label" parent="margin"]
+layout_mode = 2
+size_flags_vertical = 0
+text = "кланг"
+label_settings = SubResource("LabelSettings_6iq40")
+
+[node name="effect1" type="Label" parent="margin/title"]
+z_index = -1
+layout_mode = 2
+offset_right = 576.0
+offset_bottom = 63.0
+size_flags_vertical = 0
+text = "кланг"
+label_settings = SubResource("LabelSettings_x85us")
+
+[node name="effect2" type="Label" parent="margin/title"]
+z_index = -1
+layout_mode = 2
+offset_right = 576.0
+offset_bottom = 63.0
+size_flags_vertical = 0
+text = "кланг"
+label_settings = SubResource("LabelSettings_x85us")
+
+[node name="sort" type="VBoxContainer" parent="margin"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+
+[node name="start_game" type="Button" parent="margin/sort"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+theme = SubResource("Theme_rn3ja")
+text = "start game"
+
+[node name="options" type="Button" parent="margin/sort"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+theme = SubResource("Theme_rn3ja")
+text = "configure"
+
+[node name="exit" type="Button" parent="margin/sort"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+theme = SubResource("Theme_rn3ja")
+text = "exit"
+
+[node name="copyright" type="Label" parent="margin"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+text = "clang © marxmann"
+label_settings = SubResource("LabelSettings_dbbi2")
