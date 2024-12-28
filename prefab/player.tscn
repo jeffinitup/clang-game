@@ -100,6 +100,9 @@ func _state_physics_process(delta : float) -> void:
 	if player.velocity.y <= 0 && player.jumping:
 		player.jumping = false
 	
+	if (player.controller.debug_pressed):
+		state_machine.transition_state(\"debug\")
+	
 	if player.is_on_floor():
 		player.velocity.y = 0
 		if is_equal_approx(player.velocity.x, 0.0):
@@ -107,9 +110,6 @@ func _state_physics_process(delta : float) -> void:
 		else:
 			state_machine.transition_state(\"move\")
 		return
-	
-	if (player.controller.debug_pressed):
-		state_machine.transition_state(\"debug\")
 "
 
 [sub_resource type="GDScript" id="GDScript_wbs7e"]

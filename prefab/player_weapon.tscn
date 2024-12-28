@@ -194,10 +194,12 @@ script/source = "### weapon_swing.gd
 extends State
 
 @onready var weapon := owner as PlayerWeapon
+@onready var surface_timer := $st as Timer
 
 func _enter(_msg := {}) -> void:
 	%anim_helper.change_anim(\"swing\")
 	weapon.surface.enabled = true
+	surface_timer.start()
 	
 	%anim_helper.anim_tree.animation_finished.connect(
 		func(_anim_name : String) -> void:
@@ -215,7 +217,7 @@ func _state_process(_delta : float) -> void:
 		else weapon.player.velocity.x + vec.x)
 		weapon.player.velocity.y = vec.y
 
-func _exit() -> void:
+func st_timeout() -> void:
 	weapon.surface.enabled = false
 "
 
@@ -223,13 +225,14 @@ func _exit() -> void:
 script = ExtResource("1_wmmsa")
 
 [node name="pivot" type="Node2D" parent="."]
+rotation = -1.0472
 
 [node name="vis" type="ColorRect" parent="pivot"]
 offset_left = 19.0
-offset_top = 12.0
+offset_top = -2.0
 offset_right = 54.0
-offset_bottom = 16.0
-rotation = -1.09258
+offset_bottom = 2.0
+scale = Vector2(1.5, 0.7)
 pivot_offset = Vector2(0, 2)
 color = Color(1, 0, 0, 1)
 
@@ -237,13 +240,13 @@ color = Color(1, 0, 0, 1)
 script = ExtResource("2_8n2xs")
 
 [node name="col" type="CollisionShape2D" parent="dbox"]
-position = Vector2(36, 0)
+position = Vector2(34, 0)
 shape = SubResource("RectangleShape2D_1uw8e")
-disabled = true
 debug_color = Color(1, 0, 0.0166664, 0.419608)
 
 [node name="surface" type="RayCast2D" parent="."]
-position = Vector2(13, 0)
+position = Vector2(11, 0)
+enabled = false
 target_position = Vector2(37, 0)
 
 [node name="anim_helper" type="Node" parent="." node_paths=PackedStringArray("anim_tree")]
@@ -272,4 +275,9 @@ script = SubResource("GDScript_pqglh")
 [node name="swing" type="Node" parent="state_machine"]
 script = SubResource("GDScript_iui4w")
 
+[node name="st" type="Timer" parent="state_machine/swing"]
+wait_time = 0.1
+one_shot = true
+
 [connection signal="hurtbox_fired" from="dbox" to="." method="debug_print"]
+[connection signal="timeout" from="state_machine/swing/st" to="state_machine/swing" method="st_timeout"]

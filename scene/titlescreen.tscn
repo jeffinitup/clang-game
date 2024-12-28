@@ -14,16 +14,12 @@ spacing_bottom = -14
 line_spacing = 0.0
 font = SubResource("FontVariation_w61ex")
 font_size = 96
-outline_size = 4
-outline_color = Color(0.196078, 0.196078, 0.196078, 1)
-shadow_color = Color(0.197937, 0.197937, 0.197937, 1)
-shadow_offset = Vector2(4, 4)
 
 [sub_resource type="LabelSettings" id="LabelSettings_x85us"]
 line_spacing = 0.0
 font = SubResource("FontVariation_w61ex")
 font_size = 96
-font_color = Color(0.2, 0.2, 0.2, 0.541176)
+font_color = Color(1, 1, 1, 0.156863)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yxrgl"]
 
@@ -37,6 +33,7 @@ font_color = Color(0.2, 0.2, 0.2, 0.541176)
 
 [sub_resource type="Theme" id="Theme_rn3ja"]
 default_font = ExtResource("3_joxcs")
+Button/colors/font_focus_color = Color(1, 0, 0.0166664, 1)
 Button/styles/disabled = SubResource("StyleBoxEmpty_yxrgl")
 Button/styles/focus = SubResource("StyleBoxEmpty_sqvrg")
 Button/styles/hover = SubResource("StyleBoxEmpty_i8y1b")
@@ -77,7 +74,7 @@ text = "кланг"
 label_settings = SubResource("LabelSettings_6iq40")
 
 [node name="effect1" type="Label" parent="margin/title"]
-z_index = -1
+z_index = 1
 layout_mode = 2
 offset_right = 576.0
 offset_bottom = 63.0
@@ -86,7 +83,7 @@ text = "кланг"
 label_settings = SubResource("LabelSettings_x85us")
 
 [node name="effect2" type="Label" parent="margin/title"]
-z_index = -1
+z_index = 1
 layout_mode = 2
 offset_right = 576.0
 offset_bottom = 63.0
@@ -100,23 +97,38 @@ size_flags_horizontal = 0
 size_flags_vertical = 8
 
 [node name="start_game" type="Button" parent="margin/sort"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 8
+focus_neighbor_top = NodePath("../exit")
+focus_neighbor_bottom = NodePath("../options")
+focus_next = NodePath("../options")
+focus_previous = NodePath("../exit")
 theme = SubResource("Theme_rn3ja")
 text = "start game"
 
 [node name="options" type="Button" parent="margin/sort"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 8
+focus_neighbor_top = NodePath("../start_game")
+focus_neighbor_bottom = NodePath("../exit")
+focus_next = NodePath("../exit")
+focus_previous = NodePath("../start_game")
 theme = SubResource("Theme_rn3ja")
 text = "configure"
 
 [node name="exit" type="Button" parent="margin/sort"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 8
+focus_neighbor_top = NodePath("../options")
+focus_neighbor_bottom = NodePath("../start_game")
+focus_next = NodePath("../start_game")
+focus_previous = NodePath("../options")
 theme = SubResource("Theme_rn3ja")
 text = "exit"
 
