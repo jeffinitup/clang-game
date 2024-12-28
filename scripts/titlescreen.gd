@@ -55,3 +55,10 @@ func back_pressed() -> void:
 	menus[0].visible = true
 	menus[1].visible = false
 	%options.grab_focus()
+
+## Menu Misc.
+##------------------------------------------------------------------------------
+
+func on_hover(element : Control) -> void:
+	print("Hovered")
+	element.call_deferred("grab_focus")

@@ -36,6 +36,7 @@ func load_scene_packed(ps : PackedScene, sc : SceneContext = SceneContext.new())
 	current_scene = ps.instantiate()
 	
 	add_child(current_scene)
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	
 	if current_scene is Scene:
 		current_scene.level_change_requested.connect(scene_change_requested.bind())
@@ -92,6 +93,8 @@ func level_setup(ps : PackedScene, sc : SceneContext) -> void:
 	player.entered_cell.connect(current_scene.player_entered_cell.bind())
 	player.entered_cell.connect(hud.minimap.ppos_updated.bind())
 	
+	# Run initialization
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	current_scene.populate_cells()
 	
 

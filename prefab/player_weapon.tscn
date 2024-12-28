@@ -6,7 +6,7 @@
 [ext_resource type="Script" path="res://scripts/component/anim_helper.gd" id="3_uj8f8"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1uw8e"]
-size = Vector2(46, 64)
+size = Vector2(49, 64)
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_kvcqx"]
 animation = &"RESET"
@@ -225,14 +225,13 @@ func st_timeout() -> void:
 script = ExtResource("1_wmmsa")
 
 [node name="pivot" type="Node2D" parent="."]
-rotation = -1.0472
 
 [node name="vis" type="ColorRect" parent="pivot"]
 offset_left = 19.0
-offset_top = -2.0
+offset_top = 12.0
 offset_right = 54.0
-offset_bottom = 2.0
-scale = Vector2(1.5, 0.7)
+offset_bottom = 16.0
+rotation = -1.09258
 pivot_offset = Vector2(0, 2)
 color = Color(1, 0, 0, 1)
 
@@ -240,14 +239,16 @@ color = Color(1, 0, 0, 1)
 script = ExtResource("2_8n2xs")
 
 [node name="col" type="CollisionShape2D" parent="dbox"]
-position = Vector2(34, 0)
+position = Vector2(32.5, 0)
 shape = SubResource("RectangleShape2D_1uw8e")
+disabled = true
 debug_color = Color(1, 0, 0.0166664, 0.419608)
 
 [node name="surface" type="RayCast2D" parent="."]
 position = Vector2(11, 0)
 enabled = false
-target_position = Vector2(37, 0)
+target_position = Vector2(47, 0)
+hit_from_inside = true
 
 [node name="anim_helper" type="Node" parent="." node_paths=PackedStringArray("anim_tree")]
 unique_name_in_owner = true

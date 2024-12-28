@@ -37,7 +37,8 @@ func _ready() -> void:
 func _draw() -> void:
 	draw_string(font, get_child(0).position + Vector2.DOWN * 36, "%02d/%02d" % [hp, max_hp])
 	if owner is CharacterBody2D:
-		draw_string(font, get_child(0).position + Vector2.DOWN * 48, "%d" % owner.velocity.x)
+		draw_line(Vector2.ZERO, owner.velocity / 3.0, Color.SKY_BLUE)
+		draw_rect(Rect2i(owner.velocity / 3.0 - (Vector2.ONE * 2), Vector2i(4,4)), Color.SKY_BLUE)
 
 func _process(_delta: float) -> void:
 	queue_redraw()
