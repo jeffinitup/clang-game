@@ -22,31 +22,33 @@ var player : Player
 func _ready() -> void:
 	load_scene_packed(start)
 
-func load_scene_packed(
-	ps : PackedScene, 
-	sc : SceneContext = SceneContext.new()
-	) -> Node:
+func scene_change_requested(scene : Variant, context : SceneContext) -> void:
+	if scene is int:
+		load_scene_id(scene, context)
+	if scene is String:
+		load_scene(scene, context)
+	if scene is PackedScene:
+		load_scene_packed(scene, context)
+
+func load_scene_packed(ps : PackedScene, sc : SceneContext = SceneContext.new()) -> Node:
 	if current_scene:
 		current_scene.queue_free()
 	current_scene = ps.instantiate()
 	
 	add_child(current_scene)
 	
+	if current_scene is Scene:
+		current_scene.level_change_requested.connect(scene_change_requested.bind())
+	
 	if current_scene is Level:
 		level_setup(ps, sc)
 		
 	return current_scene
 
-func load_scene(
-	path : String, 
-	sc : SceneContext = SceneContext.new()
-	) -> Node:
+func load_scene(path : String, sc : SceneContext = SceneContext.new()) -> Node:
 	return load_scene_packed(load(path)) 
 
-func load_scene_id(
-	id : int,
-	sc : SceneContext = SceneContext.new()
-	) -> Node:
+func load_scene_id(id : int, sc : SceneContext = SceneContext.new()) -> Node:
 	return load_scene(id_to_path(id))
 
 func id_to_path(id : int) -> String:

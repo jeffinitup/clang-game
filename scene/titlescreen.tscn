@@ -1,8 +1,21 @@
-[gd_scene load_steps=15 format=3 uid="uid://cddkj86qmc2fi"]
+[gd_scene load_steps=11 format=3 uid="uid://cddkj86qmc2fi"]
 
 [ext_resource type="FontFile" uid="uid://dreclkhvqjl2p" path="res://asset/font/DeltaBlock-Regular.ttf" id="1_6yf7h"]
 [ext_resource type="Script" path="res://scripts/titlescreen.gd" id="1_h8vcp"]
+[ext_resource type="Theme" uid="uid://cwhstwqgcmq20" path="res://asset/theme_ui.tres" id="3_1dvo0"]
 [ext_resource type="FontFile" uid="uid://ignnmxnvl5os" path="res://asset/font/PixelOperatorMono.ttf" id="3_joxcs"]
+
+[sub_resource type="GDScript" id="GDScript_hxqu8"]
+resource_name = "titlescreen_scene"
+script/source = "### titlescreen_scene.gd
+extends Scene
+
+func ready_to_start() -> void:
+	level_change_requested.emit(
+		\"uid://cw0732uifkxxm\", 
+		SceneLoader.SceneContext.new()
+	)
+"
 
 [sub_resource type="FontVariation" id="FontVariation_w61ex"]
 base_font = ExtResource("1_6yf7h")
@@ -21,29 +34,10 @@ font = SubResource("FontVariation_w61ex")
 font_size = 96
 font_color = Color(1, 1, 1, 0.156863)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yxrgl"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sqvrg"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_i8y1b"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_beguf"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vee48"]
-
-[sub_resource type="Theme" id="Theme_rn3ja"]
-default_font = ExtResource("3_joxcs")
-Button/colors/font_focus_color = Color(1, 0, 0.0166664, 1)
-Button/styles/disabled = SubResource("StyleBoxEmpty_yxrgl")
-Button/styles/focus = SubResource("StyleBoxEmpty_sqvrg")
-Button/styles/hover = SubResource("StyleBoxEmpty_i8y1b")
-Button/styles/normal = SubResource("StyleBoxEmpty_beguf")
-Button/styles/pressed = SubResource("StyleBoxEmpty_vee48")
-
 [sub_resource type="FontVariation" id="FontVariation_3w7tl"]
 base_font = ExtResource("3_joxcs")
-spacing_top = -28
-spacing_bottom = -14
+spacing_glyph = -1
+spacing_space = -2
 
 [sub_resource type="LabelSettings" id="LabelSettings_dbbi2"]
 line_spacing = 0.0
@@ -52,13 +46,19 @@ outline_color = Color(0.196078, 0.196078, 0.196078, 1)
 shadow_size = 0
 shadow_color = Color(0.197937, 0.197937, 0.197937, 1)
 
-[node name="titlescreen" type="Node"]
+[node name="titlescreen" type="Node2D"]
+script = SubResource("GDScript_hxqu8")
+
+[node name="manager" type="Node" parent="."]
 script = ExtResource("1_h8vcp")
 
 [node name="margin" type="MarginContainer" parent="."]
+custom_minimum_size = Vector2(640, 480)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = 640.0
+offset_bottom = 480.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 32
@@ -68,6 +68,7 @@ theme_override_constants/margin_bottom = 32
 metadata/_edit_lock_ = true
 
 [node name="title" type="Label" parent="margin"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 0
 text = "кланг"
@@ -91,12 +92,13 @@ size_flags_vertical = 0
 text = "кланг"
 label_settings = SubResource("LabelSettings_x85us")
 
-[node name="sort" type="VBoxContainer" parent="margin"]
+[node name="menu_1" type="VBoxContainer" parent="margin"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 8
 
-[node name="start_game" type="Button" parent="margin/sort"]
+[node name="start_game" type="Button" parent="margin/menu_1"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
@@ -105,10 +107,10 @@ focus_neighbor_top = NodePath("../exit")
 focus_neighbor_bottom = NodePath("../options")
 focus_next = NodePath("../options")
 focus_previous = NodePath("../exit")
-theme = SubResource("Theme_rn3ja")
+theme = ExtResource("3_1dvo0")
 text = "start game"
 
-[node name="options" type="Button" parent="margin/sort"]
+[node name="options" type="Button" parent="margin/menu_1"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
@@ -117,10 +119,10 @@ focus_neighbor_top = NodePath("../start_game")
 focus_neighbor_bottom = NodePath("../exit")
 focus_next = NodePath("../exit")
 focus_previous = NodePath("../start_game")
-theme = SubResource("Theme_rn3ja")
+theme = ExtResource("3_1dvo0")
 text = "configure"
 
-[node name="exit" type="Button" parent="margin/sort"]
+[node name="exit" type="Button" parent="margin/menu_1"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
@@ -129,8 +131,77 @@ focus_neighbor_top = NodePath("../options")
 focus_neighbor_bottom = NodePath("../start_game")
 focus_next = NodePath("../start_game")
 focus_previous = NodePath("../options")
-theme = SubResource("Theme_rn3ja")
+theme = ExtResource("3_1dvo0")
 text = "exit"
+
+[node name="menu_2" type="VBoxContainer" parent="margin"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+
+[node name="slider" type="HBoxContainer" parent="margin/menu_2"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="label" type="Label" parent="margin/menu_2/slider"]
+layout_mode = 2
+size_flags_horizontal = 8
+text = "music 100%"
+label_settings = SubResource("LabelSettings_dbbi2")
+
+[node name="music" type="HSlider" parent="margin/menu_2/slider"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+focus_neighbor_top = NodePath("../../back")
+focus_neighbor_bottom = NodePath("../../slider2/sound")
+focus_next = NodePath("../../slider2/sound")
+focus_previous = NodePath("../../back")
+theme = ExtResource("3_1dvo0")
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="slider2" type="HBoxContainer" parent="margin/menu_2"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="label" type="Label" parent="margin/menu_2/slider2"]
+layout_mode = 2
+size_flags_horizontal = 8
+text = "sound 100%"
+label_settings = SubResource("LabelSettings_dbbi2")
+
+[node name="sound" type="HSlider" parent="margin/menu_2/slider2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+focus_neighbor_top = NodePath("../../slider/music")
+focus_neighbor_bottom = NodePath("../../back")
+focus_next = NodePath("../../back")
+focus_previous = NodePath("../../slider/music")
+theme = ExtResource("3_1dvo0")
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="back" type="Button" parent="margin/menu_2"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+focus_neighbor_top = NodePath("../slider2/sound")
+focus_neighbor_bottom = NodePath("../slider/music")
+focus_next = NodePath("../slider/music")
+focus_previous = NodePath("../slider2/sound")
+theme = ExtResource("3_1dvo0")
+keep_pressed_outside = true
+text = "back"
 
 [node name="copyright" type="Label" parent="margin"]
 layout_mode = 2
@@ -138,3 +209,11 @@ size_flags_horizontal = 8
 size_flags_vertical = 8
 text = "clang © marxmann"
 label_settings = SubResource("LabelSettings_dbbi2")
+
+[connection signal="ready_to_start" from="manager" to="." method="ready_to_start"]
+[connection signal="pressed" from="margin/menu_1/start_game" to="manager" method="start_pressed"]
+[connection signal="pressed" from="margin/menu_1/options" to="manager" method="configure_pressed"]
+[connection signal="pressed" from="margin/menu_1/exit" to="manager" method="exit_pressed"]
+[connection signal="value_changed" from="margin/menu_2/slider/music" to="manager" method="music_changed"]
+[connection signal="value_changed" from="margin/menu_2/slider2/sound" to="manager" method="sound_changed"]
+[connection signal="pressed" from="margin/menu_2/back" to="manager" method="back_pressed"]

@@ -1,5 +1,5 @@
 ### level.gd
-class_name Level extends Node2D
+class_name Level extends Scene
 
 ## Fired when reload is requested
 signal reload_requested()
