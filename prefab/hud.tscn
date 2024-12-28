@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://vpjmjy4c6tcy"]
+[gd_scene load_steps=4 format=3 uid="uid://vpjmjy4c6tcy"]
 
 [ext_resource type="Script" path="res://scripts/hud.gd" id="1_al635"]
 [ext_resource type="Script" path="res://scripts/minimap.gd" id="2_uri2m"]
+[ext_resource type="Script" path="res://scripts/hud_health.gd" id="3_wpp3x"]
 
 [node name="hud" type="CanvasLayer"]
 script = ExtResource("1_al635")
@@ -26,3 +27,10 @@ layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 0
 script = ExtResource("2_uri2m")
+
+[node name="health" type="Control" parent="margins"]
+custom_minimum_size = Vector2(100, 40)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+script = ExtResource("3_wpp3x")
