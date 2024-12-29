@@ -1,10 +1,11 @@
-[gd_scene load_steps=12 format=3 uid="uid://cddkj86qmc2fi"]
+[gd_scene load_steps=13 format=3 uid="uid://cddkj86qmc2fi"]
 
 [ext_resource type="FontFile" uid="uid://dreclkhvqjl2p" path="res://asset/font/DeltaBlock-Regular.ttf" id="1_6yf7h"]
 [ext_resource type="Script" path="res://scripts/titlescreen.gd" id="1_h8vcp"]
 [ext_resource type="Theme" uid="uid://cwhstwqgcmq20" path="res://asset/theme_ui.tres" id="3_1dvo0"]
 [ext_resource type="FontFile" uid="uid://ignnmxnvl5os" path="res://asset/font/PixelOperatorMono.ttf" id="3_joxcs"]
 [ext_resource type="Script" path="res://scripts/component/control_generic.gd" id="4_a4yqx"]
+[ext_resource type="PackedScene" uid="uid://b0aryhuic4blb" path="res://scene/options_menu.tscn" id="5_hgqoq"]
 
 [sub_resource type="GDScript" id="GDScript_hxqu8"]
 resource_name = "titlescreen_scene"
@@ -138,77 +139,9 @@ theme = ExtResource("3_1dvo0")
 text = "exit"
 script = ExtResource("4_a4yqx")
 
-[node name="menu_2" type="VBoxContainer" parent="margin"]
+[node name="options_menu" parent="margin" instance=ExtResource("5_hgqoq")]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 8
-
-[node name="slider" type="HBoxContainer" parent="margin/menu_2"]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="label" type="Label" parent="margin/menu_2/slider"]
-layout_mode = 2
-size_flags_horizontal = 8
-text = "music 100%"
-label_settings = SubResource("LabelSettings_dbbi2")
-
-[node name="music" type="HSlider" parent="margin/menu_2/slider"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 4
-focus_neighbor_top = NodePath("../../back")
-focus_neighbor_bottom = NodePath("../../slider2/sound")
-focus_next = NodePath("../../slider2/sound")
-focus_previous = NodePath("../../back")
-theme = ExtResource("3_1dvo0")
-max_value = 1.0
-step = 0.05
-value = 1.0
-script = ExtResource("4_a4yqx")
-
-[node name="slider2" type="HBoxContainer" parent="margin/menu_2"]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="label" type="Label" parent="margin/menu_2/slider2"]
-layout_mode = 2
-size_flags_horizontal = 8
-text = "sound 100%"
-label_settings = SubResource("LabelSettings_dbbi2")
-
-[node name="sound" type="HSlider" parent="margin/menu_2/slider2"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 4
-focus_neighbor_top = NodePath("../../slider/music")
-focus_neighbor_bottom = NodePath("../../back")
-focus_next = NodePath("../../back")
-focus_previous = NodePath("../../slider/music")
-theme = ExtResource("3_1dvo0")
-max_value = 1.0
-step = 0.05
-value = 1.0
-script = ExtResource("4_a4yqx")
-
-[node name="back" type="Button" parent="margin/menu_2"]
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 8
-focus_neighbor_top = NodePath("../slider2/sound")
-focus_neighbor_bottom = NodePath("../slider/music")
-focus_next = NodePath("../slider/music")
-focus_previous = NodePath("../slider2/sound")
-theme = ExtResource("3_1dvo0")
-keep_pressed_outside = true
-text = "back"
-script = ExtResource("4_a4yqx")
 
 [node name="copyright" type="Label" parent="margin"]
 layout_mode = 2
@@ -224,9 +157,4 @@ label_settings = SubResource("LabelSettings_dbbi2")
 [connection signal="pressed" from="margin/menu_1/options" to="manager" method="configure_pressed"]
 [connection signal="element_hovered" from="margin/menu_1/exit" to="manager" method="on_hover"]
 [connection signal="pressed" from="margin/menu_1/exit" to="manager" method="exit_pressed"]
-[connection signal="element_hovered" from="margin/menu_2/slider/music" to="manager" method="on_hover"]
-[connection signal="value_changed" from="margin/menu_2/slider/music" to="manager" method="music_changed"]
-[connection signal="element_hovered" from="margin/menu_2/slider2/sound" to="manager" method="on_hover"]
-[connection signal="value_changed" from="margin/menu_2/slider2/sound" to="manager" method="sound_changed"]
-[connection signal="element_hovered" from="margin/menu_2/back" to="manager" method="on_hover"]
-[connection signal="pressed" from="margin/menu_2/back" to="manager" method="back_pressed"]
+[connection signal="exit_menu" from="margin/options_menu" to="manager" method="back_pressed"]

@@ -11,9 +11,9 @@ var max_health := 5
 
 func _draw() -> void:
 	# Draw battery shape
-	draw_rect(Rect2i(Vector2i(2,2), Vector2i(20 * max_health - max_health, 30)), DARK, true)
-	draw_rect(Rect2i(Vector2i(2,2), Vector2i(20 * max_health - max_health, 30)), LIGHT, false, 2.0)
-	draw_rect(Rect2i(Vector2i((20 * max_health) + 2 - max_health, 8), Vector2i(6, 16)), LIGHT, true)
+	draw_rect(Rect2i(Vector2i(2,2), Vector2i(6 + (18 * max_health), 30)), DARK, true)
+	draw_rect(Rect2i(Vector2i(2,2), Vector2i(6 + (18 * max_health), 30)), LIGHT, false, 2.0)
+	draw_rect(Rect2i(Vector2i(8 + (18 * max_health), 8), Vector2i(6, 16)), LIGHT, true)
 	
 	# Draw battery notches
 	for i in range(health):

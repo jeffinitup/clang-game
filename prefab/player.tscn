@@ -156,7 +156,7 @@ offset_bottom = 3.0
 [node name="hbox" type="Area2D" parent="."]
 z_index = 1
 script = ExtResource("2_inaiw")
-max_hp = 6
+max_hp = 3
 invincibility_time = 1.0
 
 [node name="col" type="CollisionShape2D" parent="hbox"]

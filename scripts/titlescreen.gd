@@ -12,7 +12,7 @@ signal ready_to_start()
 ]
 ## Menu nodes
 @onready var menus : Array[Control] = [
-	%menu_1, %menu_2
+	%menu_1, %options_menu
 ]
 
 func _ready() -> void:
@@ -35,21 +35,13 @@ func start_pressed() -> void:
 func configure_pressed() -> void:
 	menus[0].visible = false
 	menus[1].visible = true
-	%music.grab_focus()
+	menus[1].entering()
 
 func exit_pressed() -> void:
 	get_tree().root.close_requested.emit()
 
 ## Menu Layer 2 ( Config )
 ##------------------------------------------------------------------------------
-
-func music_changed(value : float) -> void:
-	var label := %music.get_parent().get_node("label")
-	label.text = "music %03d%%" % (value * 100.0)
-
-func sound_changed(value : float) -> void:
-	var label := %sound.get_parent().get_node("label")
-	label.text = "sound %03d%%" % (value * 100.0)
 
 func back_pressed() -> void:
 	menus[0].visible = true
@@ -60,5 +52,4 @@ func back_pressed() -> void:
 ##------------------------------------------------------------------------------
 
 func on_hover(element : Control) -> void:
-	print("Hovered")
 	element.call_deferred("grab_focus")

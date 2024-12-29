@@ -94,7 +94,6 @@ func level_setup(ps : PackedScene, sc : SceneContext) -> void:
 	player.entered_cell.connect(hud.minimap.ppos_updated.bind())
 	player.hbox.hitbox_relay.connect(hud.health.health_update.bind())
 	
-	
 	# Run initialization
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	current_scene.populate_cells()

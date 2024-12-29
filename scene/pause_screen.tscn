@@ -1,0 +1,60 @@
+[gd_scene load_steps=3 format=3 uid="uid://bnu5fgicsfjp2"]
+
+[ext_resource type="Theme" uid="uid://cwhstwqgcmq20" path="res://asset/theme_ui.tres" id="1_v1dpk"]
+[ext_resource type="Script" path="res://scripts/component/control_generic.gd" id="2_f86qg"]
+
+[node name="pause_screen" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 64
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 64
+
+[node name="menu_1" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+
+[node name="start_game" type="Button" parent="menu_1"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+focus_neighbor_top = NodePath("../exit")
+focus_neighbor_bottom = NodePath("../options")
+focus_next = NodePath("../options")
+focus_previous = NodePath("../exit")
+theme = ExtResource("1_v1dpk")
+text = "continue"
+script = ExtResource("2_f86qg")
+
+[node name="options" type="Button" parent="menu_1"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+focus_neighbor_top = NodePath("../start_game")
+focus_neighbor_bottom = NodePath("../exit")
+focus_next = NodePath("../exit")
+focus_previous = NodePath("../start_game")
+theme = ExtResource("1_v1dpk")
+text = "configure"
+script = ExtResource("2_f86qg")
+
+[node name="exit" type="Button" parent="menu_1"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+focus_neighbor_top = NodePath("../options")
+focus_neighbor_bottom = NodePath("../start_game")
+focus_next = NodePath("../start_game")
+focus_previous = NodePath("../options")
+theme = ExtResource("1_v1dpk")
+text = "return to menu"
+script = ExtResource("2_f86qg")
