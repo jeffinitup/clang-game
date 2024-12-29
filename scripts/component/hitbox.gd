@@ -3,6 +3,8 @@ class_name Hitbox extends Area2D
 
 ## Fired when harmed
 signal hitbox_harmed(packet : Damagebox.DamagePacket)
+## Fired when harmed
+signal hitbox_relay(hp : int, max_hp : int)
 ## Fired when health is below 0
 signal hitbox_death()
 
@@ -48,6 +50,7 @@ func harmed(packet : Damagebox.DamagePacket) -> void:
 	hp -= packet.damage
 	if owner is CharacterBody2D:
 		owner.velocity += packet.knockback
+	hitbox_relay.emit(hp, max_hp)
 	
 	# Die if applicable
 	if hp <= 0:

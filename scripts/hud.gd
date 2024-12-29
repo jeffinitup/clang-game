@@ -8,3 +8,5 @@ const SCREEN_Y = 480
 
 ## Minimap node
 @onready var minimap : Control = %minimap
+## Health node
+@onready var health : Control = %health

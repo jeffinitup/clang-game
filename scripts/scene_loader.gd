@@ -92,11 +92,13 @@ func level_setup(ps : PackedScene, sc : SceneContext) -> void:
 	
 	player.entered_cell.connect(current_scene.player_entered_cell.bind())
 	player.entered_cell.connect(hud.minimap.ppos_updated.bind())
+	player.hbox.hitbox_relay.connect(hud.health.health_update.bind())
+	
 	
 	# Run initialization
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	current_scene.populate_cells()
-	
+	hud.health.health_update(player.hbox.hp, player.hbox.max_hp)
 
 class SceneContext extends Resource:
 	var warp_id : int = 0

@@ -1,9 +1,21 @@
-[gd_scene load_steps=18 format=3 uid="uid://bfbbrwtjg0nnp"]
+[gd_scene load_steps=22 format=3 uid="uid://bfbbrwtjg0nnp"]
 
 [ext_resource type="Script" path="res://scripts/player_weapon.gd" id="1_wmmsa"]
 [ext_resource type="Script" path="res://scripts/component/damagebox.gd" id="2_8n2xs"]
+[ext_resource type="AudioStream" uid="uid://bywb2k5cnpydq" path="res://asset/sfx/swing.wav" id="2_no0r3"]
 [ext_resource type="Script" path="res://scripts/component/state_machine.gd" id="2_xuvng"]
 [ext_resource type="Script" path="res://scripts/component/anim_helper.gd" id="3_uj8f8"]
+[ext_resource type="AudioStream" uid="uid://csxpj6exajm33" path="res://asset/sfx/impact.wav" id="3_wn8yq"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_i7qaf"]
+random_pitch = 1.1
+streams_count = 1
+stream_0/stream = ExtResource("2_no0r3")
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_3381d"]
+random_pitch = 1.1
+streams_count = 1
+stream_0/stream = ExtResource("3_wn8yq")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1uw8e"]
 size = Vector2(49, 64)
@@ -197,7 +209,7 @@ extends State
 @onready var surface_timer := $st as Timer
 
 func _enter(_msg := {}) -> void:
-	%anim_helper.change_anim(\"swing\")
+	%anim_helper.set_anim(\"swing\")
 	weapon.surface.enabled = true
 	surface_timer.start()
 	
@@ -205,6 +217,8 @@ func _enter(_msg := {}) -> void:
 		func(_anim_name : String) -> void:
 			state_machine.transition_state(\"idle\")
 	)
+	
+	%swing.play()
 	
 func _state_process(_delta : float) -> void:
 	weapon.update_rotation()
@@ -216,6 +230,8 @@ func _state_process(_delta : float) -> void:
 		(vec.x if signf(vec.x) != signf(weapon.player.velocity.x) \\
 		else weapon.player.velocity.x + vec.x)
 		weapon.player.velocity.y = vec.y
+		
+		%hit.play()
 
 func st_timeout() -> void:
 	weapon.surface.enabled = false
@@ -234,6 +250,18 @@ offset_bottom = 16.0
 rotation = -1.09258
 pivot_offset = Vector2(0, 2)
 color = Color(1, 0, 0, 1)
+
+[node name="sfx" type="Node2D" parent="."]
+
+[node name="swing" type="AudioStreamPlayer2D" parent="sfx"]
+unique_name_in_owner = true
+stream = SubResource("AudioStreamRandomizer_i7qaf")
+bus = &"Sound"
+
+[node name="hit" type="AudioStreamPlayer2D" parent="sfx"]
+unique_name_in_owner = true
+stream = SubResource("AudioStreamRandomizer_3381d")
+bus = &"Sound"
 
 [node name="dbox" type="Area2D" parent="."]
 script = ExtResource("2_8n2xs")
