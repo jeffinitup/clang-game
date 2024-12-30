@@ -12,8 +12,11 @@ enum Scenes {
 @onready var player_scene := preload("uid://wgifaqp6m28b")
 ## Reference to hud scene
 @onready var hud_scene := preload("uid://vpjmjy4c6tcy")
+## Reference to pause scene
+@onready var pause_scene := preload("uid://bnu5fgicsfjp2")
 ## Reference to player cam scene
 @onready var player_cam_scene := preload("uid://bw2l1ho8qfa70")
+
 ## Currently loaded scene
 var current_scene : Node
 ## Player reference
@@ -54,7 +57,7 @@ func load_scene_id(id : int, sc : SceneContext = SceneContext.new()) -> Node:
 
 func id_to_path(id : int) -> String:
 	match id:
-		Scenes.TITLE:						return ""
+		Scenes.TITLE:						return "uid://cddkj86qmc2fi"
 		Scenes.TEST_LEVEL:					return "uid://cw0732uifkxxm"
 		_:									return ""
 		
@@ -81,6 +84,10 @@ func level_setup(ps : PackedScene, sc : SceneContext) -> void:
 	var hud : HUD = hud_scene.instantiate()
 	current_scene.add_child(hud)
 	
+	# Create pause screen
+	var pause : PauseScreen = pause_scene.instantiate()
+	current_scene.add_child(pause)
+	
 	# Hook up signals
 	current_scene = current_scene as Level
 	hud.minimap.player = player
@@ -93,6 +100,8 @@ func level_setup(ps : PackedScene, sc : SceneContext) -> void:
 	player.entered_cell.connect(current_scene.player_entered_cell.bind())
 	player.entered_cell.connect(hud.minimap.ppos_updated.bind())
 	player.hbox.hitbox_relay.connect(hud.health.health_update.bind())
+	
+	pause.ready_for_menu.connect(load_scene_id.bind(0))
 	
 	# Run initialization
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
