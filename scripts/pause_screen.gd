@@ -2,7 +2,7 @@
 class_name PauseScreen extends CanvasLayer
 
 ## Fired when ready to return to menu
-signal ready_for_menu
+signal ready_for_menu()
 
 ## Fired when pause is toggled
 signal pause_toggled(mode : bool)
@@ -39,9 +39,9 @@ func set_pause(value : bool) -> void:
 		%continue.release_focus()
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventKey:
-		if event.is_action_pressed("ui_cancel"):
-			toggle_pause()
+	
+	if event.is_action_pressed("ui_cancel"):
+		toggle_pause()
 
 ## Menu Layer 1
 ##------------------------------------------------------------------------------

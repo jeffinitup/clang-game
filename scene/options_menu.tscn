@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://b0aryhuic4blb"]
+[gd_scene load_steps=8 format=3 uid="uid://b0aryhuic4blb"]
 
 [ext_resource type="Script" path="res://scripts/component/options_menu.gd" id="1_x16l0"]
 [ext_resource type="FontFile" uid="uid://ignnmxnvl5os" path="res://asset/font/PixelOperatorMono.ttf" id="2_i75df"]
 [ext_resource type="Theme" uid="uid://cwhstwqgcmq20" path="res://asset/theme_ui.tres" id="3_ks6m5"]
 [ext_resource type="Script" path="res://scripts/component/control_generic.gd" id="4_xof4r"]
+[ext_resource type="AudioStream" uid="uid://bywb2k5cnpydq" path="res://asset/sfx/swing.wav" id="5_wm8hu"]
 
 [sub_resource type="FontVariation" id="FontVariation_3w7tl"]
 base_font = ExtResource("2_i75df")
@@ -87,6 +88,10 @@ theme = ExtResource("3_ks6m5")
 keep_pressed_outside = true
 text = "back"
 script = ExtResource("4_xof4r")
+
+[node name="sfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_wm8hu")
+bus = &"Sound"
 
 [connection signal="element_hovered" from="slider/music" to="." method="on_hover"]
 [connection signal="value_changed" from="slider/music" to="." method="music_changed"]
