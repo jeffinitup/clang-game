@@ -1,7 +1,7 @@
 ### debug.gd
 extends Node
 
-func _ready() -> void:
+func _enter_tree() -> void:
 	# Fix "Test Current Scene"
 	await get_tree().current_scene.ready
 	if get_tree().current_scene.name != "main":

@@ -9,13 +9,13 @@ enum Scenes {
 ## First scene to load into
 @export var start : PackedScene
 ## Reference to player scene
-@onready var player_scene := preload("uid://wgifaqp6m28b")
+@onready var player_scene := preload("res://prefab/player.tscn") as PackedScene
 ## Reference to hud scene
-@onready var hud_scene := preload("uid://vpjmjy4c6tcy")
+@onready var hud_scene := preload("res://prefab/hud.tscn") as PackedScene
 ## Reference to pause scene
-@onready var pause_scene := preload("uid://bnu5fgicsfjp2")
+@onready var pause_scene := preload("res://scene/pause_screen.tscn") as PackedScene
 ## Reference to player cam scene
-@onready var player_cam_scene := preload("uid://bw2l1ho8qfa70")
+@onready var player_cam_scene := preload("res://prefab/player_cam.tscn") as PackedScene
 
 ## Currently loaded scene
 var current_scene : Node
