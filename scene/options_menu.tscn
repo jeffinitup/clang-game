@@ -89,12 +89,13 @@ keep_pressed_outside = true
 text = "back"
 script = ExtResource("4_xof4r")
 
-[node name="sfx" type="AudioStreamPlayer2D" parent="."]
+[node name="sfx" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_wm8hu")
 bus = &"Sound"
 
 [connection signal="element_hovered" from="slider/music" to="." method="on_hover"]
 [connection signal="value_changed" from="slider/music" to="." method="music_changed"]
+[connection signal="drag_ended" from="slider2/sound" to="." method="sound_drag_stop"]
 [connection signal="element_hovered" from="slider2/sound" to="." method="on_hover"]
 [connection signal="value_changed" from="slider2/sound" to="." method="sound_changed"]
 [connection signal="element_hovered" from="back" to="." method="on_hover"]

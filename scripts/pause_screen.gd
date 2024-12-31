@@ -29,6 +29,7 @@ func set_pause(value : bool) -> void:
 		get_tree().paused = true
 		show()
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		Music.mute_channels([1, 3, 4, 5])
 		%continue.grab_focus()
 	
 	# Unpaused
@@ -36,10 +37,10 @@ func set_pause(value : bool) -> void:
 		get_tree().paused = false
 		hide()
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		Music.unmute_channels([1, 3, 4, 5])
 		%continue.release_focus()
 
 func _unhandled_input(event: InputEvent) -> void:
-	
 	if event.is_action_pressed("ui_cancel"):
 		toggle_pause()
 
