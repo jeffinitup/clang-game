@@ -38,7 +38,7 @@ jobs:
           godot --headless --verbose --export-release "web" ./html/index.html
           
       - name: upload_artifact
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         with:
           name: html
           path: ./html/
