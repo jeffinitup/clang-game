@@ -8,6 +8,9 @@ on:
     branches: [ main ]
   # Manually allowed as well
   workflow_dispatch:
+ 
+permissions:
+  contents: write
 
 env:
   GODOT_VERSION: 4.3
