@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://bwh4sc7ggu3lw"]
+
+[ext_resource type="Script" path="res://scripts/component/verlet_rope.gd" id="1_qwki4"]
+
+[node name="rope" type="Node2D"]
+position = Vector2(45, 47)
+script = ExtResource("1_qwki4")
+
+[node name="start" type="Marker2D" parent="."]
+
+[node name="end" type="Marker2D" parent="."]

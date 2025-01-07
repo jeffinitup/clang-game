@@ -1,6 +1,9 @@
 ### debug.gd
 extends Node
 
+## Debug font
+@onready var font = preload("res://asset/font/PixelOperatorMono.ttf")
+
 func _enter_tree() -> void:
 	# Fix "Test Current Scene"
 	await get_tree().current_scene.ready

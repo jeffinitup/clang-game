@@ -18,6 +18,8 @@ signal ready_to_start()
 func _ready() -> void:
 	%start_game.grab_focus()
 	Music.play_song_path("res://asset/mod/blue_intermission.xm")
+	if OS.get_name() == "Web":
+		%exit.queue_free()
 
 func _process(_delta : float) -> void:
 	var time := Time.get_ticks_usec() / 100000.0
