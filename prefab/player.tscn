@@ -131,6 +131,7 @@ func _state_physics_process(delta : float) -> void:
 
 [node name="player" type="CharacterBody2D" groups=["player"]]
 collision_layer = 0
+platform_on_leave = 1
 script = ExtResource("1_q3oqn")
 acceleration = 3.0
 deacceleration = 5.0

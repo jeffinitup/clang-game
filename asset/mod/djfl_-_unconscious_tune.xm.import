@@ -13,6 +13,6 @@ dest_files=["res://.godot/imported/djfl_-_unconscious_tune.xm-056a58b962c883020b
 [params]
 
 force/mono=false
-playback/loop_mode=0
+playback/loop_mode=1
 load/skip_plugins=false
 load/skip_subsongs_init=false

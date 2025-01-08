@@ -17,7 +17,7 @@ signal ready_to_start()
 
 func _ready() -> void:
 	%start_game.grab_focus()
-	Music.play_song_path("res://asset/mod/porn_industryy.xm")
+	Music.play_song_path("res://asset/mod/djfl_-_unconscious_tune.xm")
 	if OS.get_name() == "Web":
 		%exit.queue_free()
 

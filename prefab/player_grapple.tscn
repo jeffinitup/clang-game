@@ -58,6 +58,7 @@ func _state_physics_process(delta : float) -> void:
 	
 	# Hook if object exists
 	if object != null:
+		grapple.hook.reparent(object, true)
 		state_machine.transition_state(\"hooked\")
 
 func _exit() -> void:
@@ -84,8 +85,7 @@ func _state_physics_process(_delta : float) -> void:
 	if grapple.player.controller.movement_vector.y != 0:
 		dist = grapple.player.global_position.distance_to(grapple.hook.global_position)
 	dist = clampf(dist + grapple.player.controller.movement_vector.y * 5, 50, grapple.hook_length)
-	grapple.rope.render_length = dist / 20
-	
+	grapple.rope.render_length = grapple.rope.start.position.distance_to(grapple.rope.end.position) / 20
 	
 	var player := grapple.player as Player
 	var target_dir := player.global_position.direction_to(grapple.hook.global_position)
@@ -105,12 +105,15 @@ func _state_physics_process(_delta : float) -> void:
 	
 
 func _exit() -> void:
+	grapple.hook.reparent(grapple, true)
 	grapple.rope.render_length = grapple.rope.point_count
 	grapple.hide()
 "
 
 [node name="player_grapple" type="Node2D"]
 script = ExtResource("1_gshea")
+stiffness = 15.0
+damping = 0.2
 
 [node name="rope" type="Node2D" parent="."]
 top_level = true
@@ -119,8 +122,8 @@ rope_limit = 300.0
 constrain = 2.0
 
 [node name="hook" type="CharacterBody2D" parent="."]
-top_level = true
 position = Vector2(0, -1)
+disable_mode = 2
 collision_layer = 0
 motion_mode = 1
 platform_floor_layers = 1
