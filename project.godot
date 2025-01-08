@@ -61,6 +61,15 @@ map_marker="Renders on minimap."
 
 fonts/dynamic_fonts/use_oversampling=false
 
+[importer_defaults]
+
+dudejoe870.openmptimporter={
+"force/mono": false,
+"load/skip_plugins": false,
+"load/skip_subsongs_init": false,
+"playback/loop_mode": 1
+}
+
 [input]
 
 ui_accept={

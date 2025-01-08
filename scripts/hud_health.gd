@@ -17,9 +17,14 @@ func _draw() -> void:
 	
 	# Draw battery notches
 	for i in range(health):
+		if i > max_health - 1:
+			break
 		draw_rect(Rect2i(Vector2i(6 + (18 * i), 6), Vector2i(16, 22)), LIGHT)
 
 func health_update(hp : int, max_hp : int) -> void:
 	health = hp
 	max_health = max_hp
+	queue_redraw()
+
+func _process(_delta: float) -> void:
 	queue_redraw()

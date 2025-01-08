@@ -5,7 +5,3 @@
 [node name="rope" type="Node2D"]
 position = Vector2(45, 47)
 script = ExtResource("1_qwki4")
-
-[node name="start" type="Marker2D" parent="."]
-
-[node name="end" type="Marker2D" parent="."]

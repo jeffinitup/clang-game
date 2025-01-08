@@ -17,7 +17,7 @@ signal ready_to_start()
 
 func _ready() -> void:
 	%start_game.grab_focus()
-	Music.play_song_path("res://asset/mod/blue_intermission.xm")
+	Music.play_song_path("res://asset/mod/brokenequipment.xm")
 	if OS.get_name() == "Web":
 		%exit.queue_free()
 

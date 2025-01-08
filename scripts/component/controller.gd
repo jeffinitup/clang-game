@@ -15,31 +15,44 @@ var throw_pressed : bool = false
 ## Whether or not debug is pressed
 var debug_pressed : bool = false
 
-## Input queueing timer
-var timer : Timer
-
-func _ready() -> void:
-	# Create timer
-	timer = Timer.new()
-	timer.one_shot = true
-	timer.wait_time = 0.3
-	add_child(timer)
-	timer.timeout.connect(
-		func() -> void:
-			jump_pressed = false
-	)
-
-func _process(_delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	# Update movement vector
 	movement_vector = Input.get_vector("left", "right", "up", "down")
+	
 
 func _unhandled_input(event: InputEvent) -> void:
-	# Update booleans
-	if event.is_action_pressed("jump"): queue_jump()
-	swing_pressed = true if event.is_action_pressed("swing") else false
-	throw_pressed = true if event.is_action_pressed("throw") else false
-	debug_pressed = true if event.is_action_pressed("debug") else false
+	if event.is_action_pressed("jump"):
+		queue_action(&"jump")
+	if event.is_action_pressed("swing") and !swing_pressed:
+		queue_action(&"swing")
+	if event.is_action_pressed("throw") and !throw_pressed:
+		queue_action(&"throw")
+	if event.is_action_pressed("debug") and !debug_pressed:
+		queue_action(&"debug")
 
-func queue_jump() -> void:
+func queue_action(action : StringName) -> void:
+	match action:
+		&"jump":		jump_pressed = true
+		&"swing":		swing_pressed = true
+		&"throw":		throw_pressed = true
+		&"debug":		debug_pressed = true
+	
+	var timer : Timer = create_timer(0.2 if action != &"throw" else 0.05)
 	timer.start()
-	jump_pressed = true
+	timer.timeout.connect(func() -> void:
+		match action:
+			&"jump":		jump_pressed = false
+			&"swing":		swing_pressed = false
+			&"throw":		throw_pressed = false
+			&"debug":		debug_pressed = false
+		timer.queue_free()
+	)
+
+
+func create_timer(time : float = 0.2) -> Timer:
+	# Create timer
+	var timer = Timer.new()
+	timer.one_shot = true
+	timer.wait_time = time
+	add_child(timer)
+	return timer

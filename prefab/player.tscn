@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://wgifaqp6m28b"]
+[gd_scene load_steps=16 format=3 uid="uid://wgifaqp6m28b"]
 
 [ext_resource type="Script" path="res://scripts/component/controller.gd" id="1_lng0o"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_q3oqn"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://bfbbrwtjg0nnp" path="res://prefab/player_weapon.tscn" id="2_nv7x4"]
 [ext_resource type="Script" path="res://scripts/component/state_machine.gd" id="2_rtogl"]
 [ext_resource type="Script" path="res://scripts/component/bobble_sprite.gd" id="3_3bxhl"]
+[ext_resource type="PackedScene" uid="uid://cmi15sg62pffy" path="res://prefab/player_grapple.tscn" id="6_45mb1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_w0fvi"]
 size = Vector2(26, 36)
@@ -210,6 +211,9 @@ physics_extents = Vector2(3, 8)
 [node name="player_weapon" parent="." instance=ExtResource("2_nv7x4")]
 position = Vector2(0, -18)
 
+[node name="player_grapple" parent="." instance=ExtResource("6_45mb1")]
+position = Vector2(-10, -18)
+
 [node name="controller" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("1_lng0o")
@@ -230,3 +234,5 @@ script = SubResource("GDScript_48wc7")
 
 [node name="debug" type="Node" parent="state_machine"]
 script = SubResource("GDScript_wbs7e")
+
+[connection signal="hook_update" from="player_grapple" to="." method="update_hooked"]

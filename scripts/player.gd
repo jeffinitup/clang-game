@@ -14,6 +14,7 @@ const SPEED_CAP : float = 300.0
 @onready var player_weapon := get_node("player_weapon") as PlayerWeapon
 @onready var hbox := get_node("hbox") as Hitbox
 
+var is_hooked : bool = false
 var last_cell_pos : Vector2i = Vector2i.MAX
 
 func _ready() -> void:
@@ -56,3 +57,6 @@ func update_cell_pos() -> void:
 	if posi != last_cell_pos:
 		entered_cell.emit(posi)
 	last_cell_pos = posi
+
+func update_hooked(value : bool) -> void:
+	is_hooked = value

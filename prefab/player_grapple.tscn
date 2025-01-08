@@ -1,0 +1,138 @@
+[gd_scene load_steps=8 format=3 uid="uid://cmi15sg62pffy"]
+
+[ext_resource type="Script" path="res://scripts/player_grapple.gd" id="1_gshea"]
+[ext_resource type="Script" path="res://scripts/component/verlet_rope.gd" id="1_mbqt0"]
+[ext_resource type="Script" path="res://scripts/component/state_machine.gd" id="2_ajku3"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_8na31"]
+radius = 4.47214
+
+[sub_resource type="GDScript" id="GDScript_ew8nl"]
+resource_name = "grapple_inactive"
+script/source = "### grapple_inactive.gd
+extends State
+
+@onready var grapple : PlayerGrapple = owner
+
+func _enter(_msg := {}) -> void:
+	grapple.hook.process_mode = Node.PROCESS_MODE_DISABLED
+	grapple.hook_update.emit(false)
+
+func _state_physics_process(delta : float) -> void:
+	grapple.hook.global_position = grapple.global_position
+	if grapple.player.controller.throw_pressed:
+		state_machine.transition_state(\"shot\")
+"
+
+[sub_resource type="GDScript" id="GDScript_vo6go"]
+resource_name = "grapple_shot"
+script/source = "### grapple_shot.gd
+extends State
+
+@onready var grapple : PlayerGrapple = owner
+
+func _enter(_msg := {}) -> void:
+	# Set hook velocity
+	var mouse_pos : Vector2 = grapple.player.cursor.position - grapple.player.cursor.origin
+	var rotation = atan2(mouse_pos.y, mouse_pos.x)
+	var vec := Vector2.RIGHT.from_angle(rotation)
+	grapple.hook.velocity = vec * grapple.hook_speed
+
+	# Enable hook
+	grapple.hook.global_position = grapple.global_position
+	grapple.hook.process_mode = Node.PROCESS_MODE_PAUSABLE
+
+func _state_physics_process(delta : float) -> void:
+	# Update hook
+	var result := grapple.hook.move_and_collide(grapple.hook.velocity * delta)
+	var object := result.get_collider() if result != null else null
+	
+	# Check if hook is too far from player
+	var dist := grapple.hook.global_position.distance_to(grapple.global_position)
+	if dist > grapple.hook_length:
+		state_machine.transition_state(\"inactive\")
+	
+	# Hook if object exists
+	if object != null:
+		state_machine.transition_state(\"hooked\")
+
+func _exit() -> void:
+	# Disable hook
+	grapple.hook.process_mode = Node.PROCESS_MODE_DISABLED
+"
+
+[sub_resource type="GDScript" id="GDScript_1r5hg"]
+resource_name = "grapple_hooked"
+script/source = "### grapple_hooked.gd
+extends State
+
+@onready var grapple : PlayerGrapple = owner
+@onready var dist := grapple.hook_length
+
+func _enter(_msg := {}) -> void:
+	dist = grapple.player.global_position.distance_to(grapple.hook.global_position)
+	grapple.hook_update.emit(true)
+
+func _state_physics_process(_delta : float) -> void:
+	if grapple.player.controller.jump_pressed:
+		state_machine.transition_state(\"inactive\")
+	
+	if grapple.player.controller.movement_vector.y != 0:
+		dist = grapple.player.global_position.distance_to(grapple.hook.global_position)
+		dist = clampf(dist + grapple.player.controller.movement_vector.y * 5, 50, grapple.hook_length)
+	
+	var player := grapple.player as Player
+	var target_dir := player.global_position.direction_to(grapple.hook.global_position)
+	var target_dist := player.global_position.distance_to(grapple.hook.global_position)
+	var displacement := target_dist - dist
+	var force := Vector2.ZERO
+	
+	if displacement > 0:
+		var spring_force_magnitude : float = grapple.stiffness * displacement
+		var spring_force := target_dir * spring_force_magnitude
+		
+		var vel_dot := player.velocity.dot(target_dir)
+		var damping := -grapple.damping * vel_dot * target_dir
+		
+		force = spring_force + damping
+	player.velocity += force
+
+func _state_process(_delta) -> void:
+	grapple.rope.rope_length = dist / 10
+"
+
+[node name="player_grapple" type="Node2D"]
+script = ExtResource("1_gshea")
+
+[node name="rope" type="Node2D" parent="."]
+top_level = true
+script = ExtResource("1_mbqt0")
+rope_length = 40.0
+rope_limit = 300.0
+constrain = 2.0
+
+[node name="hook" type="CharacterBody2D" parent="."]
+top_level = true
+position = Vector2(0, -1)
+collision_layer = 0
+motion_mode = 1
+platform_floor_layers = 1
+platform_wall_layers = 1
+metadata/_edit_group_ = true
+
+[node name="col" type="CollisionShape2D" parent="hook"]
+shape = SubResource("CircleShape2D_8na31")
+debug_color = Color(0.956863, 0, 0, 0.419608)
+
+[node name="state_machine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
+script = ExtResource("2_ajku3")
+initial_state = NodePath("inactive")
+
+[node name="inactive" type="Node" parent="state_machine"]
+script = SubResource("GDScript_ew8nl")
+
+[node name="shot" type="Node" parent="state_machine"]
+script = SubResource("GDScript_vo6go")
+
+[node name="hooked" type="Node" parent="state_machine"]
+script = SubResource("GDScript_1r5hg")
