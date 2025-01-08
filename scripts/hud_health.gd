@@ -17,6 +17,9 @@ func _draw() -> void:
 	
 	# Draw battery notches
 	for i in range(health):
+		if health == 1 && Time.get_ticks_msec() % 1000 < 500:
+			break
+			
 		if i > max_health - 1:
 			break
 		draw_rect(Rect2i(Vector2i(6 + (18 * i), 6), Vector2i(16, 22)), LIGHT)

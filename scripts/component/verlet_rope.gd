@@ -11,6 +11,7 @@ class_name Rope2D extends Node2D
 @export var endPin : bool = true
 
 @onready var o_pos : Vector2 = position
+@onready var render_length := point_count - 2
 
 var start : Node2D
 var end : Node2D 
@@ -25,11 +26,13 @@ func _ready()->void:
 	add_child(start)
 	add_child(end)
 	
-	resize()
+	point_count = get_point_count(rope_length)
+	resize_arrays()
 	init_position()
 
 func resize() -> void:
 	point_count = get_point_count(rope_length)
+	render_length = point_count - 2
 	resize_arrays()
 
 func get_point_count(distance: float)->int:
@@ -63,13 +66,18 @@ func init_position()->void:
 func _physics_process(delta : float) -> void:
 	update_points(delta)
 	update_constrain()
-
-func _process(_delta : float) -> void:
 	queue_redraw()
 
 func _draw() -> void:
-	draw_polyline(pos, Color.WHITE, 1.0)
+	var line : PackedVector2Array = []
+	line.append(start.position)
+	for point in min(render_length, point_count - 1):
+		line.append(pos[point])
+	line.append(end.position)
+	
+	draw_polyline(line, Color.WHITE, 1.0)
 	draw_rect(Rect2i(Vector2i(start.position - Vector2.ONE * 2), Vector2i(4, 4)), Color.RED, true)
+	draw_string(Debug.font, end.position + Vector2.ONE * 6, "%d p" % render_length)
 	draw_rect(Rect2i(Vector2i(end.position - Vector2.ONE * 2), Vector2i(4, 4)), Color.RED, true)
 
 

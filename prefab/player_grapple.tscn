@@ -17,6 +17,7 @@ extends State
 func _enter(_msg := {}) -> void:
 	grapple.hook.process_mode = Node.PROCESS_MODE_DISABLED
 	grapple.hook_update.emit(false)
+	grapple.hide()
 
 func _state_physics_process(delta : float) -> void:
 	grapple.hook.global_position = grapple.global_position
@@ -41,6 +42,7 @@ func _enter(_msg := {}) -> void:
 	# Enable hook
 	grapple.hook.global_position = grapple.global_position
 	grapple.hook.process_mode = Node.PROCESS_MODE_PAUSABLE
+	grapple.show()
 
 func _state_physics_process(delta : float) -> void:
 	# Update hook
@@ -49,8 +51,10 @@ func _state_physics_process(delta : float) -> void:
 	
 	# Check if hook is too far from player
 	var dist := grapple.hook.global_position.distance_to(grapple.global_position)
+	grapple.rope.render_length = dist / 20
 	if dist > grapple.hook_length:
 		state_machine.transition_state(\"inactive\")
+		return
 	
 	# Hook if object exists
 	if object != null:
@@ -79,7 +83,9 @@ func _state_physics_process(_delta : float) -> void:
 	
 	if grapple.player.controller.movement_vector.y != 0:
 		dist = grapple.player.global_position.distance_to(grapple.hook.global_position)
-		dist = clampf(dist + grapple.player.controller.movement_vector.y * 5, 50, grapple.hook_length)
+	dist = clampf(dist + grapple.player.controller.movement_vector.y * 5, 50, grapple.hook_length)
+	grapple.rope.render_length = dist / 20
+	
 	
 	var player := grapple.player as Player
 	var target_dir := player.global_position.direction_to(grapple.hook.global_position)
@@ -96,9 +102,11 @@ func _state_physics_process(_delta : float) -> void:
 		
 		force = spring_force + damping
 	player.velocity += force
+	
 
-func _state_process(_delta) -> void:
-	grapple.rope.rope_length = dist / 10
+func _exit() -> void:
+	grapple.rope.render_length = grapple.rope.point_count
+	grapple.hide()
 "
 
 [node name="player_grapple" type="Node2D"]
@@ -107,7 +115,6 @@ script = ExtResource("1_gshea")
 [node name="rope" type="Node2D" parent="."]
 top_level = true
 script = ExtResource("1_mbqt0")
-rope_length = 40.0
 rope_limit = 300.0
 constrain = 2.0
 
